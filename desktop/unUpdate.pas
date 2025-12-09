@@ -5,10 +5,12 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  System.IniFiles;
+  System.IniFiles, Vcl.ExtCtrls, Vcl.Imaging.pngimage, Vcl.StdCtrls;
 
 type
   TfrmUpdate = class(TForm)
+    imgProductLogo: TImage;
+    lblVersion: TLabel;
     procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
@@ -24,7 +26,10 @@ implementation
 {$R *.dfm}
 
 uses
-  Utils, Constants;
+  Utils, Constants, Language;
+
+var
+  LanguageLabels: TLabelLanguages;
 
 procedure TfrmUpdate.FormCreate(Sender: TObject);
 var
@@ -34,6 +39,7 @@ var
   RemoteVersion: string;
 begin
   IniConfigFile := TIniFile.Create(Format('%s%s', [ExePath, CONFIG_FILE]));
+  LanguageLabels := BuildLanguageLabels;
   try
     DownloadFile(DEFAULT_VERSION_URI, DEFAULT_VERSION_FILE);
     IniVersionFile := TIniFile.Create(Format('%s%s', [ExePath, DEFAULT_VERSION_FILE]));
@@ -46,6 +52,10 @@ begin
       begin
         IniConfigFile.WriteString('APPLICATION', 'VERSION', RemoteVersion);
       end;
+
+      frmUpdate.Caption := Format('%s - %s', [APPLICATION_NAME, LocalVersion]);
+      lblVersion.Caption := Format('%s: %s', [LanguageLabels.Version, LocalVersion]);
+
       IniVersionFile.Free;
     end;
 

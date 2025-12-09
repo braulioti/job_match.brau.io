@@ -1,6 +1,8 @@
 ## [Version 1.0.0-RC1](https://github.com/braulioti/job_match/tree/v_0.1.0-RC1?tab=readme-ov-file) - 09/12/2025
 
 ### Feature
+- Created the version update screen that will allow downloading the latest version.
+- Added icons and images to the desktop project.
 
 ### Fix
 
