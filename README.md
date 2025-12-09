@@ -24,17 +24,6 @@ New project updates can be followed through X:
 
 - [Project Structure](#project-structure)
 - [Technologies](#technologies)
-- [Installation](#installation)
-- [Desktop Version](#desktop-version)
-    - [Build the version](#build-the-version)
-    - [Files and folders that need to be distributed](#files-and-folders-that-need-to-be-distributed)
-    - [Server file settings](#server-file-settings)
-- [Backend API Project](#backend-api-project)
-    - [Health Check Endpoint](#health-check-endpoint)
-    - [API v1](#api-v1)
-    - [Environment variables configuration](#environment-variables-configuration)
-    - [Troubleshooting - Docling on Windows](#troubleshooting---docling-on-windows)
-    - [API Documentation - Swagger](#api-documentation---swagger)
 - [Versioning](#versioning)
 - [Author](#author)
 
