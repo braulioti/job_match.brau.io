@@ -28,10 +28,30 @@ uses
 
 procedure TfrmUpdate.FormCreate(Sender: TObject);
 var
-  IniFile: TIniFile;
+  IniConfigFile: TIniFile;
+  IniVersionFile: TIniFile;
+  LocalVersion: string;
+  RemoteVersion: string;
 begin
-  IniFile := TIniFile.Create(Format('%s%s', [ExePath + CONFIG_FILE]));
-  DownloadFile('https://github.com/braulioti/job_match.brau.io/raw/refs/heads/feature/create-the-desktop-update-tool/docs/version_info.ini', 'version.ini')
+  IniConfigFile := TIniFile.Create(Format('%s%s', [ExePath, CONFIG_FILE]));
+  try
+    DownloadFile(DEFAULT_VERSION_URI, DEFAULT_VERSION_FILE);
+    IniVersionFile := TIniFile.Create(Format('%s%s', [ExePath, DEFAULT_VERSION_FILE]));
+
+    try
+      LocalVersion := IniConfigFile.ReadString('APPLICATION', 'VERSION', EmptyStr);
+      RemoteVersion := IniVersionFile.ReadString('APPLICATION', 'VERSION', EmptyStr);
+    finally
+      if LocalVersion <> RemoteVersion then
+      begin
+        IniConfigFile.WriteString('APPLICATION', 'VERSION', RemoteVersion);
+      end;
+      IniVersionFile.Free;
+    end;
+
+  finally
+    IniConfigFile.Free;
+  end;
 end;
 
 end.
