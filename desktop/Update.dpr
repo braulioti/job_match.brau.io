@@ -6,7 +6,8 @@ uses
   Utils in 'Utils.pas',
   Vcl.Themes,
   Vcl.Styles,
-  Constants in 'Constants.pas';
+  Constants in 'Constants.pas',
+  Language in 'Language.pas';
 
 {$R *.res}
 
