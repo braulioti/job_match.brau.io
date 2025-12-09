@@ -7,3 +7,5 @@
 ### Documentation
 - The project images have been defined and the basic documentation created.
 - LICENSE file with MIT license has been created.
+- CONTRIBUTING.md file has been added with instructions on how to contribute to the project.
+- README.md has been updated with information about folder structure and technologies used in the project.
