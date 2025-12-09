@@ -6,3 +6,4 @@
 
 ### Documentation
 - The project images have been defined and the basic documentation created.
+- LICENSE file with MIT license has been created.
