@@ -4,12 +4,13 @@
 
 [![X: @_brau_io](https://img.shields.io/badge/contact-@_brau_io-blue.svg?style=flat)](https://x.com/_brau_io)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/53ac0a0cb0f5464d89eea04cf39bc43f)](https://app.codacy.com/gh/braulioti/job_match.brau.io/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![Delphi](https://img.shields.io/badge/Delphi-d92a30?style=for-the-badge&logo=delphi&logoColor=white)](https://www.embarcadero.com//)
 [![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](https://www.python.org/)
-[![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white)](https://sqlite.org/)
 [![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/en/stable/)
+[![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white)](https://sqlite.org/)
 [![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 [![Swagger](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)](https://swagger.io/)
-[![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![Licence](https://img.shields.io/github/license/Ileriayo/markdown-badges?style=for-the-badge)](./LICENSE)
 
 This project aims to provide a tool where job vacancies and resumes will be informed.
@@ -37,6 +38,7 @@ job_match.brau.io/
 ├── frontend/                  # Frontend (Angular Application)
 ├── continuous-integration/    # CI/CD configurations
 ├── installer/                 # Installation scripts
+├── languages/                 # Language files
 ├── docs/                      # Project documentation
 ├── README.md                  # Main documentation
 ├── CHANGELOG.md               # Change history
@@ -56,6 +58,7 @@ job_match.brau.io/
 - PostgreSQL 13 or higher
 - Flask-Migrate (Alembic)
 - Dockling
+- Embarcadero Delphi 12 - Community Edition
 
 ## Versioning
 

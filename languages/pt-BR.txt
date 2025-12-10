@@ -1,0 +1,5 @@
+DOWNLOADING_LANGUAGE_FILES=Baixando Arquivos de Idiomas
+LANGUAGE=Português (Brasil)
+UPDATING_CONFIG_FILES=Atualizando Arquivos de Configuração
+UPDATING_LANGUAGE_FILES=Atualizando Arquivos de Idiomas
+VERSION=Versão

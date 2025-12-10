@@ -1,0 +1,5 @@
+DOWNLOADING_LANGUAGE_FILES=Downloading Language Files
+LANGUAGE=English
+UPDATING_CONFIG_FILES=Updating Config Files
+UPDATING_LANGUAGE_FILES=Updating Language Files
+VERSION=Version
