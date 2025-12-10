@@ -4,6 +4,7 @@
 - Created the version update screen that will allow downloading the latest version.
 - Added icons and images to the desktop project.
 - Project Structure section has been updated to include the languages folder.
+- Created the basic structure of the desktop project.
 
 ### Fix
 

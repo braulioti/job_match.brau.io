@@ -10,6 +10,7 @@ type
     VersionTitle: string;
     UpdatingConfigFiles: string;
     DownloadingLanguageFiles: string;
+    MessageExit: string;
     Error: string;
   end;
 
@@ -28,10 +29,10 @@ begin
   for I := 0 to Lines.Count - 1 do
   begin
     Line := Lines.Strings[I];
-    LineKey := Copy(Line, 0, Pos(Line, '=') - 1);
+    LineKey := Copy(Line, 0, Pos('=', Line) - 1);
     if Key = LineKey then
     begin
-      LoadStringLine := Copy(Line, Pos(Line, '=') + 1, Length(Line));
+      LoadStringLine := Copy(Line, Pos('=', Line) + 1, Length(Line));
     end;
   end;
 end;
@@ -50,6 +51,7 @@ begin
 
     Aux.VersionTitle := LoadStringLine(LanguageFile, 'VERSION');
     Aux.DownloadingLanguageFiles := LoadStringLine(LanguageFile, 'DOWNLOADING_LANGUAGE_FILES');
+    Aux.MessageExit := LoadStringLine(LanguageFile, 'MESSAGE_EXIT');
 
     BuildLanguageLabels := Aux;
   finally

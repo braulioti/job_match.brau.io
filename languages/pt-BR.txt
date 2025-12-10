@@ -1,5 +1,10 @@
 DOWNLOADING_LANGUAGE_FILES=Baixando Arquivos de Idiomas
+EXIT=Sair
 LANGUAGE=Português (Brasil)
+MENU_HELP=Ajuda
+MENU_PROJECT=Projeto
+MENU_TOOLS=Ferramentas
+MESSAGE_EXIT=Deseja realmente fechar o JobMatch?
 UPDATING_CONFIG_FILES=Atualizando Arquivos de Configuração
 UPDATING_LANGUAGE_FILES=Atualizando Arquivos de Idiomas
 VERSION=Versão
