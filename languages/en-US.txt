@@ -1,5 +1,13 @@
 DOWNLOADING_LANGUAGE_FILES=Downloading Language Files
+EXIT=Exit
 LANGUAGE=English
+MENU_HELP=Help
+MENU_PROJECT=Project
+MENU_TOOLS=Tools
+MESSAGE_EXIT=Do you really want to close the JobMatch?
 UPDATING_CONFIG_FILES=Updating Config Files
 UPDATING_LANGUAGE_FILES=Updating Language Files
 VERSION=Version
+
+
+

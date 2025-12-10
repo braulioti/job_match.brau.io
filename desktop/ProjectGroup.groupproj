@@ -6,6 +6,9 @@
         <Projects Include="Update.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="JobMatch.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -23,14 +26,23 @@
     <Target Name="Update:Make">
         <MSBuild Projects="Update.dproj" Targets="Make"/>
     </Target>
+    <Target Name="JobMatch">
+        <MSBuild Projects="JobMatch.dproj"/>
+    </Target>
+    <Target Name="JobMatch:Clean">
+        <MSBuild Projects="JobMatch.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="JobMatch:Make">
+        <MSBuild Projects="JobMatch.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="Update"/>
+        <CallTarget Targets="Update;JobMatch"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="Update:Clean"/>
+        <CallTarget Targets="Update:Clean;JobMatch:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="Update:Make"/>
+        <CallTarget Targets="Update:Make;JobMatch:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
