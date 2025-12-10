@@ -11,69 +11,70 @@ uses Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Forms,
   Language;
 
 type
-  TMainForm = class(TForm)
-    OpenDialog: TOpenDialog;
-    StatusBar: TStatusBar;
-    aclActionList: TActionList;
-    EditCut1: TEditCut;
-    EditCopy1: TEditCopy;
-    EditPaste1: TEditPaste;
-    actExit: TAction;
-    WindowCascade1: TWindowCascade;
-    WindowTileHorizontal1: TWindowTileHorizontal;
-    WindowMinimizeAll1: TWindowMinimizeAll;
-    HelpAbout1: TAction;
-    WindowTileVertical1: TWindowTileVertical;
-    ToolBar2: TToolBar;
-    ToolButton1: TToolButton;
-    ToolButton2: TToolButton;
-    ToolButton3: TToolButton;
-    ToolButton4: TToolButton;
-    ToolButton5: TToolButton;
-    ToolButton6: TToolButton;
-    ToolButton9: TToolButton;
-    ToolButton7: TToolButton;
-    ToolButton8: TToolButton;
-    ToolButton10: TToolButton;
-    ToolButton11: TToolButton;
-    ImageCollection1: TImageCollection;
-    VirtualImageList1: TVirtualImageList;
-    mnuMainMenu: TActionMainMenuBar;
-    acmMenuManager: TActionManager;
+  TfrmMainForm = class(TForm)
+    stbStatusBar: TStatusBar;
+    mnuMenu: TMainMenu;
     procedure FileNew1Execute(Sender: TObject);
-    procedure FileOpen1Execute(Sender: TObject);
     procedure HelpAbout1Execute(Sender: TObject);
     procedure FileExit1Execute(Sender: TObject);
     procedure WindowCascade1Execute(Sender: TObject);
     procedure WindowTileHorizontal1Execute(Sender: TObject);
     procedure WindowTileVertical1Execute(Sender: TObject);
-    procedure actExitExecute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
     procedure CreateMDIChild(const Name: string);
-    procedure UpdateLanguage(language: string);
+    procedure UpdateLanguage;
+    procedure ConfigurateMenu;
   public
     Languages: TLabelLanguages;
+    ActionClients: TActionClients;
+    procedure CloseMainForm(Sender: TObject);
+    procedure OpenConfigurationDialog(Sender: TObject);
     { Public declarations }
   end;
 
 var
-  MainForm: TMainForm;
+  frmMainForm: TfrmMainForm;
 
 implementation
 
 {$R *.dfm}
 
-uses CHILDWIN, About;
+uses CHILDWIN, About, Constants, unConfiguration;
+var
+  MenuProject: TMenuItem;
+  MenuProjectExit: TMenuItem;
+  MenuTools: TMenuItem;
+  MenuToolsConfiguration: TMenuItem;
 
-procedure TMainForm.actExitExecute(Sender: TObject);
+procedure TfrmMainForm.CloseMainForm(Sender: TObject);
 begin
-  if MessageDlg(Languages.MessageExit, mtConfirmation, mbYesNo, 0) = mrYes then
-    Application.Terminate;
+  frmMainForm.Close;
 end;
 
-procedure TMainForm.CreateMDIChild(const Name: string);
+procedure TfrmMainForm.ConfigurateMenu;
+begin
+  MenuProject := TMenuItem.Create(mnuMenu);
+
+  MenuProjectExit := TMenuItem.Create(MenuProject);
+  MenuProjectExit.OnClick := CloseMainForm;
+  MenuProject.Add(MenuProjectExit);
+
+  MenuTools := TMenuItem.Create(mnuMenu);
+
+  MenuToolsConfiguration := TMenuItem.Create(MenuTools);
+  MenuToolsConfiguration.OnClick := OpenConfigurationDialog;
+  MenuTools.Add(MenuToolsConfiguration);
+
+  mnuMenu.Items.Clear;
+  mnuMenu.Items.Add(MenuProject);
+  mnuMenu.Items.Add(MenuTools);
+
+end;
+
+procedure TfrmMainForm.CreateMDIChild(const Name: string);
 var
   Child: TMDIChild;
 begin
@@ -83,50 +84,71 @@ begin
   if FileExists(Name) then Child.Memo1.Lines.LoadFromFile(Name);
 end;
 
-procedure TMainForm.FileNew1Execute(Sender: TObject);
+procedure TfrmMainForm.FileNew1Execute(Sender: TObject);
 begin
   CreateMDIChild('NONAME' + IntToStr(MDIChildCount + 1));
 end;
 
-procedure TMainForm.FileOpen1Execute(Sender: TObject);
+procedure TfrmMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  if OpenDialog.Execute then
-    CreateMDIChild(OpenDialog.FileName);
+  if MessageDlg(Languages.MessageExit, mtConfirmation, mbYesNo, 0) = mrYes then
+  begin
+    Application.Terminate;
+  end
+  else
+  begin
+    Action := TCloseAction.caNone;
+  end;
 end;
 
-procedure TMainForm.FormCreate(Sender: TObject);
+procedure TfrmMainForm.FormCreate(Sender: TObject);
 begin
-  Languages := BuildLanguageLabels('pt-BR');
+  Languages := BuildLanguageLabels(DEFAULT_LANGUAGE);
+  ConfigurateMenu;
+  UpdateLanguage;
 end;
 
-procedure TMainForm.HelpAbout1Execute(Sender: TObject);
+procedure TfrmMainForm.HelpAbout1Execute(Sender: TObject);
 begin
   AboutBox.ShowModal;
 end;
 
-procedure TMainForm.UpdateLanguage(language: string);
+procedure TfrmMainForm.OpenConfigurationDialog(Sender: TObject);
 begin
-
+  frmConfiguration.ShowModal;
 end;
 
-procedure TMainForm.WindowCascade1Execute(Sender: TObject);
+procedure TfrmMainForm.UpdateLanguage;
+var
+  MenuItems: TActionClients;
+  I: Integer;
+begin
+  MenuProject.Caption := Languages.Project;
+  MenuProjectExit.Caption := Languages.Exit;
+  MenuTools.Caption := Languages.Tools;
+  MenuToolsConfiguration.Caption := Format('%s...', [Languages.Configuration]);
+
+  frmConfiguration.Caption := Languages.Configuration;
+end;
+
+procedure TfrmMainForm.WindowCascade1Execute(Sender: TObject);
 begin
   Cascade;
 end;
 
-procedure TMainForm.WindowTileHorizontal1Execute(Sender: TObject);
+procedure TfrmMainForm.WindowTileHorizontal1Execute(Sender: TObject);
 begin
   TileMode := tbHorizontal;
   Tile;
 end;
 
-procedure TMainForm.WindowTileVertical1Execute(Sender: TObject);
+procedure TfrmMainForm.WindowTileVertical1Execute(Sender: TObject);
 begin
   TileMode := tbVertical;
   Tile;
 end;
 
-procedure TMainForm.FileExit1Execute(Sender: TObject);
+procedure TfrmMainForm.FileExit1Execute(Sender: TObject);
 begin
   Close;
 end;

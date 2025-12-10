@@ -12,6 +12,13 @@ type
     DownloadingLanguageFiles: string;
     MessageExit: string;
     Error: string;
+    Configuration: string;
+    Tools: string;
+    Project: string;
+    Exit: string;
+    OK: string;
+    Cancel: string;
+    Apply: string;
   end;
 
 function BuildLanguageLabels(LanguageCode: string): TLabelLanguages;
@@ -52,6 +59,13 @@ begin
     Aux.VersionTitle := LoadStringLine(LanguageFile, 'VERSION');
     Aux.DownloadingLanguageFiles := LoadStringLine(LanguageFile, 'DOWNLOADING_LANGUAGE_FILES');
     Aux.MessageExit := LoadStringLine(LanguageFile, 'MESSAGE_EXIT');
+    Aux.Configuration := LoadStringLine(LanguageFile, 'CONFIGURATION');
+    Aux.Tools := LoadStringLine(LanguageFile, 'TOOLS');
+    Aux.Project := LoadStringLine(LanguageFile, 'PROJECT');
+    Aux.Exit := LoadStringLine(LanguageFile, 'EXIT');
+    Aux.OK := LoadStringLine(LanguageFile, 'OK');
+    Aux.Cancel := LoadStringLine(LanguageFile, 'CANCEL');
+    Aux.Apply := LoadStringLine(LanguageFile, 'APPLY');
 
     BuildLanguageLabels := Aux;
   finally
