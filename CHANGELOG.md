@@ -1,10 +1,11 @@
-## [Version 1.0.0-RC1](https://github.com/braulioti/job_match.brau.io/tree/release/1.0.0-RC1) - 09/12/2025
+## [Version 1.0.0-RC1](https://github.com/braulioti/job_match.brau.io/tree/release/1.0.0-RC1) - 10/12/2025
 
 ### Feature
 - Created the version update screen that will allow downloading the latest version.
 - Added icons and images to the desktop project.
 - Project Structure section has been updated to include the languages folder.
 - Created the basic structure of the desktop project.
+- Created the configuration dialog to allow the user to change the application settings.
 
 ### Fix
 

@@ -132,7 +132,7 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="unMainForm.pas">
-            <Form>MainForm</Form>
+            <Form>frmMainForm</Form>
         </DCCReference>
         <DCCReference Include="ChildWin.pas">
             <Form>MDIChild</Form>
@@ -143,6 +143,10 @@
         <DCCReference Include="Constants.pas"/>
         <DCCReference Include="Language.pas"/>
         <DCCReference Include="Utils.pas"/>
+        <DCCReference Include="unConfiguration.pas">
+            <Form>frmConfiguration</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
