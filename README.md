@@ -38,6 +38,7 @@ job_match.brau.io/
 ├── frontend/                  # Frontend (Angular Application)
 ├── continuous-integration/    # CI/CD configurations
 ├── installer/                 # Installation scripts
+├── languages/                 # Language files
 ├── docs/                      # Project documentation
 ├── README.md                  # Main documentation
 ├── CHANGELOG.md               # Change history

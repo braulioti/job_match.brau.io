@@ -8,6 +8,7 @@ uses
   System.SysUtils;
 
 procedure DownloadFile(const URL, Destino: string);
+procedure CreateFolderInApplicationPath(FolderName: string);
 function ExePath: string;
 
 implementation
@@ -33,6 +34,16 @@ end;
 function ExePath: string;
 begin
   ExePath := ExtractFilePath(ParamStr(0));
+end;
+
+procedure CreateFolderInApplicationPath(FolderName: string);
+var
+  Folder: string;
+begin
+  Folder := Format('%s%s', [ExePath, FolderName]);
+
+  if not DirectoryExists(Folder) then
+    ForceDirectories(Folder);
 end;
 
 
