@@ -4,8 +4,8 @@ object frmUpdate: TfrmUpdate
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Job Match'
-  ClientHeight = 261
-  ClientWidth = 348
+  ClientHeight = 332
+  ClientWidth = 413
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -14,9 +14,12 @@ object frmUpdate: TfrmUpdate
   Font.Style = []
   Position = poScreenCenter
   OnCreate = FormCreate
+  DesignSize = (
+    413
+    332)
   TextHeight = 15
   object imgProductLogo: TImage
-    Left = 57
+    Left = 90
     Top = 24
     Width = 233
     Height = 72
@@ -417,12 +420,39 @@ object frmUpdate: TfrmUpdate
     Stretch = True
   end
   object lblVersion: TLabel
-    Left = 57
+    Left = 90
     Top = 120
     Width = 233
     Height = 15
     Alignment = taCenter
     AutoSize = False
     Caption = 'Version:'
+  end
+  object lblProgressBar: TLabel
+    Left = 8
+    Top = 274
+    Width = 397
+    Height = 15
+    Anchors = [akLeft, akRight, akBottom]
+    AutoSize = False
+    ExplicitTop = 203
+    ExplicitWidth = 332
+  end
+  object pgbProgressBar: TProgressBar
+    Left = 8
+    Top = 295
+    Width = 397
+    Height = 17
+    Anchors = [akLeft, akRight, akBottom]
+    TabOrder = 0
+    ExplicitTop = 224
+    ExplicitWidth = 332
+  end
+  object tmrUpdateVersion: TTimer
+    Enabled = False
+    Interval = 100
+    OnTimer = tmrUpdateVersionTimer
+    Left = 24
+    Top = 24
   end
 end
