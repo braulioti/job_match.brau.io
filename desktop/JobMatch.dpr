@@ -10,7 +10,8 @@ uses
   Constants in 'Constants.pas',
   Language in 'Language.pas',
   Utils in 'Utils.pas',
-  unConfiguration in 'unConfiguration.pas' {frmConfiguration};
+  unConfiguration in 'unConfiguration.pas' {frmConfiguration},
+  Config in 'Config.pas';
 
 {$R *.RES}
 
@@ -20,7 +21,7 @@ begin
   Application.Title := 'Job Match';
   TStyleManager.TrySetStyle('Iceberg Classico');
   Application.CreateForm(TfrmMainForm, frmMainForm);
-  Application.CreateForm(TAboutBox, AboutBox);
   Application.CreateForm(TfrmConfiguration, frmConfiguration);
+  Application.CreateForm(TAboutBox, AboutBox);
   Application.Run;
 end.

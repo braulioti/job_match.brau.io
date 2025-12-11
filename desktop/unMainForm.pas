@@ -8,7 +8,7 @@ uses Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Forms,
   Vcl.ImgList, Vcl.FormTabsBar, System.ImageList, System.Actions,
   Vcl.BaseImageCollection, Vcl.ImageCollection, Vcl.VirtualImageList,
   Vcl.ActnMan, Vcl.ActnCtrls, Vcl.ActnMenus, Vcl.PlatformDefaultStyleActnCtrls,
-  Language;
+  Language, System.UITypes;
 
 type
   TfrmMainForm = class(TForm)
@@ -25,11 +25,11 @@ type
   private
     { Private declarations }
     procedure CreateMDIChild(const Name: string);
-    procedure UpdateLanguage;
     procedure ConfigurateMenu;
   public
     Languages: TLabelLanguages;
     ActionClients: TActionClients;
+    procedure UpdateLanguage;
     procedure CloseMainForm(Sender: TObject);
     procedure OpenConfigurationDialog(Sender: TObject);
     { Public declarations }
@@ -42,7 +42,7 @@ implementation
 
 {$R *.dfm}
 
-uses CHILDWIN, About, Constants, unConfiguration;
+uses CHILDWIN, About, Constants, unConfiguration, Utils, Config;
 var
   MenuProject: TMenuItem;
   MenuProjectExit: TMenuItem;
@@ -92,20 +92,19 @@ end;
 procedure TfrmMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   if MessageDlg(Languages.MessageExit, mtConfirmation, mbYesNo, 0) = mrYes then
-  begin
-    Application.Terminate;
-  end
+    Application.Terminate
   else
-  begin
     Action := TCloseAction.caNone;
-  end;
 end;
 
 procedure TfrmMainForm.FormCreate(Sender: TObject);
 begin
-  Languages := BuildLanguageLabels(DEFAULT_LANGUAGE);
+  LoadConfiguration;
+  Languages := BuildLanguageLabels(CustomConfig.Language);
+  LoadAvailableLanguages;
   ConfigurateMenu;
   UpdateLanguage;
+  SaveConfiguration;
 end;
 
 procedure TfrmMainForm.HelpAbout1Execute(Sender: TObject);
@@ -119,16 +118,14 @@ begin
 end;
 
 procedure TfrmMainForm.UpdateLanguage;
-var
-  MenuItems: TActionClients;
-  I: Integer;
 begin
   MenuProject.Caption := Languages.Project;
   MenuProjectExit.Caption := Languages.Exit;
   MenuTools.Caption := Languages.Tools;
-  MenuToolsConfiguration.Caption := Format('%s...', [Languages.Configuration]);
+  MenuToolsConfiguration.Caption := Format('%s...', [Languages.Configurations]);
 
-  frmConfiguration.Caption := Languages.Configuration;
+  frmConfiguration.Caption := Languages.Configurations;
+  frmMainForm.Caption := Format('%s - %s', [APPLICATION_NAME, CustomConfig.Version]);
 end;
 
 procedure TfrmMainForm.WindowCascade1Execute(Sender: TObject);

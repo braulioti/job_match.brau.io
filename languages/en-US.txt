@@ -1,6 +1,7 @@
 APPLY=Apply
 CANCEL=Cancel
-CONFIGURATION=Configuration
+CLOSE=Close
+CONFIGURATIONS=Configurations
 DOWNLOADING_LANGUAGE_FILES=Downloading Language Files
 EXIT=Exit
 HELP=Help

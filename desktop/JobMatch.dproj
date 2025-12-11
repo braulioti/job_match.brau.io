@@ -147,6 +147,7 @@
             <Form>frmConfiguration</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="Config.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
