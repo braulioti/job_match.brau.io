@@ -1,4 +1,7 @@
+ABOUT=Sobre
+ABOUT_DETAILS=Uma ferramenta de código aberto para melhorar o relacionamento entre o candidato e a empresa.
 APPLY=Aplicar
+AUTHOR=Autor
 CANCEL=Cancelar
 CLOSE=Fechar
 CONFIGURATIONS=Configurações
@@ -6,6 +9,7 @@ DOWNLOADING_LANGUAGE_FILES=Baixando Arquivos de Idiomas
 EXIT=Sair
 HELP=Ajuda
 LANGUAGE=Português (Brasil)
+LOADING_APPLICATION_SCREENS=Carregando telas do aplicativo
 MESSAGE_EXIT=Deseja realmente fechar o JobMatch?
 OK=OK
 PROJECT=Projeto

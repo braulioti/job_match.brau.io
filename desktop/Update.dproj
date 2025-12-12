@@ -134,9 +134,9 @@
             <Form>frmUpdate</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="Utils.pas"/>
-        <DCCReference Include="Constants.pas"/>
-        <DCCReference Include="Language.pas"/>
+        <DCCReference Include="libs\Utils.pas"/>
+        <DCCReference Include="libs\Constants.pas"/>
+        <DCCReference Include="libs\Language.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -174,12 +174,6 @@
                     <Platform Name="Win32">
                         <RemoteDir>Assets\</RemoteDir>
                         <RemoteName>Logo44x44.png</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="Win32\Debug\Update.exe" Configuration="Debug" Class="ProjectOutput">
-                    <Platform Name="Win32">
-                        <RemoteName>Update.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

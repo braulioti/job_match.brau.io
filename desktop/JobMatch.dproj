@@ -140,14 +140,16 @@
         <DCCReference Include="about.pas">
             <Form>AboutBox</Form>
         </DCCReference>
-        <DCCReference Include="Constants.pas"/>
-        <DCCReference Include="Language.pas"/>
-        <DCCReference Include="Utils.pas"/>
+        <DCCReference Include="libs\Constants.pas"/>
+        <DCCReference Include="libs\Language.pas"/>
+        <DCCReference Include="libs\Utils.pas"/>
         <DCCReference Include="unConfiguration.pas">
             <Form>frmConfiguration</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="Config.pas"/>
+        <DCCReference Include="libs\Config.pas"/>
+        <DCCReference Include="unSplash.pas">
+            <Form>frmSplash</Form>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

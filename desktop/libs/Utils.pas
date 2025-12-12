@@ -5,10 +5,11 @@ interface
 
 uses
   System.Net.HttpClient, System.Classes, System.Net.HttpClientComponent,
-  System.SysUtils;
+  System.SysUtils, Vcl.StdCtrls;
 
 procedure DownloadFile(const URL, Destino: string);
 procedure CreateFolderInApplicationPath(FolderName: string);
+procedure ChangeAndRefreshLabel(LabelComponent: TLabel; NewCaption: string);
 function ExePath: string;
 
 implementation
@@ -44,6 +45,13 @@ begin
 
   if not DirectoryExists(Folder) then
     ForceDirectories(Folder);
+end;
+
+procedure ChangeAndRefreshLabel(LabelComponent: TLabel; NewCaption: string);
+begin
+  LabelComponent.Caption := NewCaption;
+  LabelComponent.Repaint;
+  LabelComponent.Refresh;
 end;
 
 

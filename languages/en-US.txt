@@ -1,4 +1,7 @@
+ABOUT=About
+ABOUT_DETAILS=An open-source tool to improve the relationship between the candidate and the company.
 APPLY=Apply
+AUTHOR=Author
 CANCEL=Cancel
 CLOSE=Close
 CONFIGURATIONS=Configurations
@@ -6,6 +9,7 @@ DOWNLOADING_LANGUAGE_FILES=Downloading Language Files
 EXIT=Exit
 HELP=Help
 LANGUAGE=English
+LOADING_APPLICATION_SCREENS=Loading Application Screens
 MESSAGE_EXIT=Do you really want to close the JobMatch?
 OK=OK
 PROJECT=Project
