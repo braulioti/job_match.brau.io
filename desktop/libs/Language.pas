@@ -22,6 +22,10 @@ type
     Apply: string;
     SelectLanguage: string;
     Close: string;
+    LoadingApplicationScreens: string;
+    About: string;
+    AboutDetails: string;
+    Author: string;
   end;
 
   TAvailableLanguages = record
@@ -107,6 +111,11 @@ begin
     Aux.OK := LoadStringLine(LanguageFile, 'OK');
     Aux.Cancel := LoadStringLine(LanguageFile, 'CANCEL');
     Aux.Close := LoadStringLine(LanguageFile, 'CLOSE');
+    Aux.SelectLanguage := LoadStringLine(LanguageFile, 'SELECT_LANGUAGE');
+    Aux.LoadingApplicationScreens := LoadStringLine(LanguageFile, 'LOADING_APPLICATION_SCREENS');
+    Aux.About := LoadStringLine(LanguageFile, 'ABOUT');
+    Aux.AboutDetails := LoadStringLine(LanguageFile, 'ABOUT_DETAILS');
+    Aux.Author := LoadStringLine(LanguageFile, 'AUTHOR');
 
     BuildLanguageLabels := Aux;
   finally

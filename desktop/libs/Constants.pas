@@ -7,6 +7,7 @@ const DEFAULT_VERSION_URI = 'https://github.com/braulioti/job_match.brau.io/raw/
 const DEFAULT_LANGUAGE_URI = 'https://github.com/braulioti/job_match.brau.io/raw/refs/heads/feature/create-the-desktop-update-tool/languages';
 const DEFAULT_VERSION_FILE = 'version_info.ini';
 const APPLICATION_NAME = 'Job Match';
+const AUTHOR_NAME = 'Bráulio Figueiredo';
 const LANGUAGE_FOLDER = 'languages';
 const LANGUAGE_FILE_EXT = 'txt';
 const DEFAULT_LANGUAGE = 'en-US';
