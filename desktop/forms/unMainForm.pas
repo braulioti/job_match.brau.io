@@ -14,6 +14,13 @@ type
   TfrmMainForm = class(TForm)
     stbStatusBar: TStatusBar;
     mnuMenu: TMainMenu;
+    tobToolBar: TToolBar;
+    tobNewProject: TToolButton;
+    vimlImageListToolBar: TVirtualImageList;
+    imlImageCollection: TImageCollection;
+    VirtualImageListMenu: TVirtualImageList;
+    tobSeparator1: TToolButton;
+    tobConfiguration: TToolButton;
     procedure FileNew1Execute(Sender: TObject);
     procedure FileExit1Execute(Sender: TObject);
     procedure WindowCascade1Execute(Sender: TObject);
@@ -21,6 +28,8 @@ type
     procedure WindowTileVertical1Execute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure OpenNewProject(Sender: TObject);
+    procedure OpenConfigurationDialog(Sender: TObject);
   private
     { Private declarations }
     procedure CreateMDIChild(const Name: string);
@@ -30,7 +39,6 @@ type
     ActionClients: TActionClients;
     procedure UpdateLanguage;
     procedure CloseMainForm(Sender: TObject);
-    procedure OpenConfigurationDialog(Sender: TObject);
     procedure OpenAboutDialog(Sender: TObject);
     { Public declarations }
   end;
@@ -42,9 +50,13 @@ implementation
 
 {$R *.dfm}
 
-uses CHILDWIN, Constants, unConfiguration, Utils, Config, unAbout;
+uses
+  CHILDWIN, Constants, unConfiguration, Utils, Config, unAbout, unNewProject;
+
 var
   MenuProject: TMenuItem;
+  MenuProjectNewProject: TMenuItem;
+  MenuProjectSeparator: TMenuItem;
   MenuProjectExit: TMenuItem;
   MenuTools: TMenuItem;
   MenuToolsConfiguration: TMenuItem;
@@ -60,14 +72,27 @@ procedure TfrmMainForm.ConfigurateMenu;
 begin
   MenuProject := TMenuItem.Create(mnuMenu);
 
+  MenuProjectNewProject := TMenuItem.Create(MenuProject);
+  MenuProjectNewProject.OnClick := OpenNewProject;
+  MenuProjectNewProject.ShortCut := ShortCut(Ord('N'), [ssCtrl]);
+  MenuProjectNewProject.ImageIndex := 0;
+  MenuProject.Add(MenuProjectNewProject);
+
+  MenuProjectSeparator := TMenuItem.Create(MenuProject);
+  MenuProjectSeparator.Caption := SEPARATOR_MENU;
+  MenuProject.Add(MenuProjectSeparator);
+
+
   MenuProjectExit := TMenuItem.Create(MenuProject);
   MenuProjectExit.OnClick := CloseMainForm;
+  MenuProjectExit.ShortCut := ShortCut(Ord('X'), [ssCtrl]);
   MenuProject.Add(MenuProjectExit);
 
   MenuTools := TMenuItem.Create(mnuMenu);
 
   MenuToolsConfiguration := TMenuItem.Create(MenuTools);
   MenuToolsConfiguration.OnClick := OpenConfigurationDialog;
+  MenuToolsConfiguration.ImageIndex := 1;
   MenuTools.Add(MenuToolsConfiguration);
 
   MenuHelp := TMenuItem.Create(mnuMenu);
@@ -125,14 +150,23 @@ begin
   frmConfiguration.ShowModal;
 end;
 
+procedure TfrmMainForm.OpenNewProject(Sender: TObject);
+begin
+  frmNewProject.ShowModal;
+end;
+
 procedure TfrmMainForm.UpdateLanguage;
 begin
   MenuProject.Caption := Languages.Project;
+  MenuProjectNewProject.Caption := Format('%s...', [Languages.NewProject]);
   MenuProjectExit.Caption := Languages.Exit;
   MenuTools.Caption := Languages.Tools;
   MenuToolsConfiguration.Caption := Format('%s...', [Languages.Configurations]);
   MenuHelp.Caption := Languages.Help;
   MenuHelpAbout.Caption := Format('%s...', [Languages.About]);
+
+  tobNewProject.Hint := Languages.NewProject;
+  tobConfiguration.Hint := Languages.Configurations;
 
   frmConfiguration.Caption := Languages.Configurations;
   frmMainForm.Caption := Format('%s - %s', [APPLICATION_NAME, CustomConfig.Version]);

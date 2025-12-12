@@ -27,6 +27,9 @@ type
     AboutDetails: string;
     Author: string;
     Help: string;
+    NewProject: string;
+    ProjectName: string;
+    ProjectDetails: string;
   end;
 
   TAvailableLanguages = record
@@ -118,6 +121,9 @@ begin
     Aux.AboutDetails := LoadStringLine(LanguageFile, 'ABOUT_DETAILS');
     Aux.Author := LoadStringLine(LanguageFile, 'AUTHOR');
     Aux.Help := LoadStringLine(LanguageFile, 'HELP');
+    Aux.NewProject := LoadStringLine(LanguageFile, 'NEW_PROJECT');
+    Aux.ProjectName := LoadStringLine(LanguageFile, 'PROJECT_NAME');
+    Aux.ProjectDetails := LoadStringLine(LanguageFile, 'PROJECT_DETAILS');
 
     BuildLanguageLabels := Aux;
   finally

@@ -2,7 +2,7 @@ program Update;
 
 uses
   Vcl.Forms,
-  unUpdate in 'unUpdate.pas' {frmUpdate},
+  unUpdate in 'forms_update\unUpdate.pas' {frmUpdate},
   Utils in 'libs\Utils.pas',
   Vcl.Themes,
   Vcl.Styles,

@@ -130,7 +130,7 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="unUpdate.pas">
+        <DCCReference Include="forms_update\unUpdate.pas">
             <Form>frmUpdate</Form>
             <FormType>dfm</FormType>
         </DCCReference>
