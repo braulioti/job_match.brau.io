@@ -15,7 +15,6 @@ type
     stbStatusBar: TStatusBar;
     mnuMenu: TMainMenu;
     procedure FileNew1Execute(Sender: TObject);
-    procedure HelpAbout1Execute(Sender: TObject);
     procedure FileExit1Execute(Sender: TObject);
     procedure WindowCascade1Execute(Sender: TObject);
     procedure WindowTileHorizontal1Execute(Sender: TObject);
@@ -32,6 +31,7 @@ type
     procedure UpdateLanguage;
     procedure CloseMainForm(Sender: TObject);
     procedure OpenConfigurationDialog(Sender: TObject);
+    procedure OpenAboutDialog(Sender: TObject);
     { Public declarations }
   end;
 
@@ -42,12 +42,14 @@ implementation
 
 {$R *.dfm}
 
-uses CHILDWIN, About, Constants, unConfiguration, Utils, Config;
+uses CHILDWIN, Constants, unConfiguration, Utils, Config, unAbout;
 var
   MenuProject: TMenuItem;
   MenuProjectExit: TMenuItem;
   MenuTools: TMenuItem;
   MenuToolsConfiguration: TMenuItem;
+  MenuHelp: TMenuItem;
+  MenuHelpAbout: TMenuItem;
 
 procedure TfrmMainForm.CloseMainForm(Sender: TObject);
 begin
@@ -68,10 +70,16 @@ begin
   MenuToolsConfiguration.OnClick := OpenConfigurationDialog;
   MenuTools.Add(MenuToolsConfiguration);
 
+  MenuHelp := TMenuItem.Create(mnuMenu);
+
+  MenuHelpAbout := TMenuItem.Create(MenuHelp);
+  MenuHelpAbout.OnClick := OpenAboutDialog;
+  MenuHelp.Add(MenuHelpAbout);
+
   mnuMenu.Items.Clear;
   mnuMenu.Items.Add(MenuProject);
   mnuMenu.Items.Add(MenuTools);
-
+  mnuMenu.Items.Add(MenuHelp);
 end;
 
 procedure TfrmMainForm.CreateMDIChild(const Name: string);
@@ -107,9 +115,9 @@ begin
   SaveConfiguration;
 end;
 
-procedure TfrmMainForm.HelpAbout1Execute(Sender: TObject);
+procedure TfrmMainForm.OpenAboutDialog(Sender: TObject);
 begin
-  AboutBox.ShowModal;
+  frmAbout.ShowModal;
 end;
 
 procedure TfrmMainForm.OpenConfigurationDialog(Sender: TObject);
@@ -123,6 +131,8 @@ begin
   MenuProjectExit.Caption := Languages.Exit;
   MenuTools.Caption := Languages.Tools;
   MenuToolsConfiguration.Caption := Format('%s...', [Languages.Configurations]);
+  MenuHelp.Caption := Languages.Help;
+  MenuHelpAbout.Caption := Format('%s...', [Languages.About]);
 
   frmConfiguration.Caption := Languages.Configurations;
   frmMainForm.Caption := Format('%s - %s', [APPLICATION_NAME, CustomConfig.Version]);

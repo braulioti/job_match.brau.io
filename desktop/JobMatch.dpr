@@ -5,15 +5,15 @@ uses
   Vcl.Themes,
   Vcl.Styles,
   System.SysUtils,
-  unMainForm in 'unMainForm.pas' {frmMainForm},
+  unMainForm in 'forms\unMainForm.pas' {frmMainForm},
   ChildWin in 'ChildWin.pas' {MDIChild},
-  about in 'about.pas' {AboutBox},
   Constants in 'libs\Constants.pas',
   Language in 'libs\Language.pas',
   Utils in 'libs\Utils.pas',
-  unConfiguration in 'unConfiguration.pas' {frmConfiguration},
+  unConfiguration in 'forms\unConfiguration.pas' {frmConfiguration},
   Config in 'libs\Config.pas',
-  unSplash in 'unSplash.pas' {frmSplash};
+  unSplash in 'forms\unSplash.pas' {frmSplash},
+  unAbout in 'forms\unAbout.pas' {frmAbout};
 
 {$R *.RES}
 
@@ -51,7 +51,7 @@ begin
   frmSplash.pgbProgress.Position := frmSplash.pgbProgress.Position + 1;
   Sleep(500);
 
-  Application.CreateForm(TAboutBox, AboutBox);
+  Application.CreateForm(TfrmAbout, frmAbout);
   frmSplash.pgbProgress.Position := frmSplash.pgbProgress.Position + 1;
   Sleep(500);
 

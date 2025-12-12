@@ -7,6 +7,7 @@
 - Created the basic structure of the desktop project.
 - Created the configuration dialog to allow the user to change the application settings.
 - Added splash screen and multi-language support to the desktop application.
+- Created the about dialog to show the application information on the desktop.
 
 ### Fix
 
