@@ -131,24 +131,25 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="unMainForm.pas">
+        <DCCReference Include="forms\unMainForm.pas">
             <Form>frmMainForm</Form>
         </DCCReference>
         <DCCReference Include="ChildWin.pas">
             <Form>MDIChild</Form>
         </DCCReference>
-        <DCCReference Include="about.pas">
-            <Form>AboutBox</Form>
-        </DCCReference>
         <DCCReference Include="libs\Constants.pas"/>
         <DCCReference Include="libs\Language.pas"/>
         <DCCReference Include="libs\Utils.pas"/>
-        <DCCReference Include="unConfiguration.pas">
+        <DCCReference Include="forms\unConfiguration.pas">
             <Form>frmConfiguration</Form>
         </DCCReference>
         <DCCReference Include="libs\Config.pas"/>
-        <DCCReference Include="unSplash.pas">
+        <DCCReference Include="forms\unSplash.pas">
             <Form>frmSplash</Form>
+        </DCCReference>
+        <DCCReference Include="forms\unAbout.pas">
+            <Form>frmAbout</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

@@ -445,8 +445,6 @@ object frmUpdate: TfrmUpdate
     Height = 17
     Anchors = [akLeft, akRight, akBottom]
     TabOrder = 0
-    ExplicitTop = 224
-    ExplicitWidth = 332
   end
   object tmrUpdateVersion: TTimer
     Enabled = False
