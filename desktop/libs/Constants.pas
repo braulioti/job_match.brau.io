@@ -14,6 +14,7 @@ const DEFAULT_LANGUAGE = 'en-US';
 const DEFAULT_LABEL_VERSION = 'Version';
 const DEFAULT_ERROR_TITLE = 'Error';
 const LANGUAGE_LIST_FILE = 'available_languages';
+const SEPARATOR_MENU = '-';
 
 implementation
 

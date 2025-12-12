@@ -13,7 +13,8 @@ uses
   unConfiguration in 'forms\unConfiguration.pas' {frmConfiguration},
   Config in 'libs\Config.pas',
   unSplash in 'forms\unSplash.pas' {frmSplash},
-  unAbout in 'forms\unAbout.pas' {frmAbout};
+  unAbout in 'forms\unAbout.pas' {frmAbout},
+  unNewProject in 'forms\unNewProject.pas' {frmNewProject};
 
 {$R *.RES}
 
@@ -36,6 +37,7 @@ begin
   Application.MainFormOnTaskBar := True;
   Application.Title := 'Job Match';
   Application.CreateForm(TfrmMainForm, frmMainForm);
+  Application.CreateForm(TfrmNewProject, frmNewProject);
   frmSplash.pgbProgress.Position := frmSplash.pgbProgress.Position + 1;
 
   // Update Labels

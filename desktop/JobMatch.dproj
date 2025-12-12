@@ -151,6 +151,10 @@
             <Form>frmAbout</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="forms\unNewProject.pas">
+            <Form>frmNewProject</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
