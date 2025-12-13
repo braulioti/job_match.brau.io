@@ -10,6 +10,7 @@
 - Created the about dialog to show the application information on the desktop.
 - Created the new project dialog to allow the user to create a new project.
 - Created the open project dialog to allow the user to open an existing project.
+- Created a basic flask application to project backend.
 
 ### Fix
 
