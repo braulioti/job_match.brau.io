@@ -25,6 +25,7 @@ New project updates can be followed through X:
 
 - [Project Structure](#project-structure)
 - [Technologies](#technologies)
+- [Languages](#languages)
 - [Versioning](#versioning)
 - [Author](#author)
 
@@ -59,6 +60,12 @@ job_match.brau.io/
 - Flask-Migrate (Alembic)
 - Dockling
 - Embarcadero Delphi 12 - Community Edition
+
+## Languages
+
+To add a translation file to the project, add a line with the language code in `languages/available_languages` and create a language file with the `.txt` extension in the `languages/` folder. 
+
+The translated content should have a constant before the "=" and the translation after it. Example: `EXIT=Exit`. To facilitate understanding of the file, the values are being organized in alphabetical order.
 
 ## Versioning
 

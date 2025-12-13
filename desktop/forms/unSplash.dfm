@@ -1,28 +1,28 @@
-object frmUpdate: TfrmUpdate
+object frmSplash: TfrmSplash
   Left = 0
   Top = 0
-  BorderIcons = [biSystemMenu, biMinimize]
-  BorderStyle = bsSingle
-  Caption = 'Job Match'
-  ClientHeight = 332
-  ClientWidth = 413
+  BorderIcons = []
+  BorderStyle = bsNone
+  Caption = 'frmSplash'
+  ClientHeight = 359
+  ClientWidth = 437
   Color = clBtnFace
+  DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  FormStyle = fsStayOnTop
   Position = poScreenCenter
-  OnCreate = FormCreate
-  DesignSize = (
-    413
-    332)
+  Visible = True
   TextHeight = 15
-  object imgProductLogo: TImage
-    Left = 90
-    Top = 24
+  object imgLogo: TImage
+    Left = 102
+    Top = 32
     Width = 233
     Height = 72
+    AutoSize = True
     Picture.Data = {
       0954506E67496D61676589504E470D0A1A0A0000000D49484452000000E90000
       004808060000001377D2A80000000473424954080808087C0864880000000970
@@ -416,43 +416,64 @@ object frmUpdate: TfrmUpdate
       8A8907524F3C39C7C503A9279E9CE3E281D4134FCE71F140EA8927E7B87820F5
       C493735C3C907AE2C9392E1E483DF1E41C170FA49E78728ECBFF016A4807D937
       BEF19C0000000049454E44AE426082}
-    Proportional = True
-    Stretch = True
+  end
+  object lblProgressStatus: TLabel
+    Left = 16
+    Top = 299
+    Width = 413
+    Height = 15
+    AutoSize = False
   end
   object lblVersion: TLabel
     Left = 90
-    Top = 120
-    Width = 233
+    Top = 128
+    Width = 257
     Height = 15
     Alignment = taCenter
     AutoSize = False
-    Caption = 'Version:'
+    Caption = 'Version'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = [fsBold]
+    ParentFont = False
   end
-  object lblProgressBar: TLabel
-    Left = 8
-    Top = 274
-    Width = 397
-    Height = 15
-    Anchors = [akLeft, akRight, akBottom]
+  object lblAboutDetails: TLabel
+    Left = 58
+    Top = 168
+    Width = 321
+    Height = 81
+    Alignment = taCenter
     AutoSize = False
-    ExplicitTop = 203
-    ExplicitWidth = 332
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+    WordWrap = True
   end
-  object pgbProgressBar: TProgressBar
-    Left = 8
-    Top = 295
-    Width = 397
+  object lblAuthor: TLabel
+    Left = 90
+    Top = 264
+    Width = 257
+    Height = 15
+    Alignment = taCenter
+    AutoSize = False
+    Caption = 'Author'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object pgbProgress: TProgressBar
+    Left = 16
+    Top = 320
+    Width = 413
     Height = 17
-    Anchors = [akLeft, akRight, akBottom]
     TabOrder = 0
-    ExplicitTop = 224
-    ExplicitWidth = 332
-  end
-  object tmrUpdateVersion: TTimer
-    Enabled = False
-    Interval = 100
-    OnTimer = tmrUpdateVersionTimer
-    Left = 24
-    Top = 24
   end
 end
