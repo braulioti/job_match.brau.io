@@ -26,6 +26,10 @@ New project updates can be followed through X:
 - [Project Structure](#project-structure)
 - [Technologies](#technologies)
 - [Languages](#languages)
+- [Backend API Project](#backend-api-project)
+    - [Installation](#installation)
+    - [Execution](#execution)
+    - [Health Check Endpoint](#health-check-endpoint)
 - [Versioning](#versioning)
 - [Author](#author)
 
@@ -33,8 +37,7 @@ New project updates can be followed through X:
 
 ```
 job_match.brau.io/
-├── api/                      # Backend API (Flask)
-├── backend/                  # Additional backend (if applicable)
+├── api/                       # Backend API (Flask)
 ├── desktop/                   # Desktop Application (Delphi)
 ├── frontend/                  # Frontend (Angular Application)
 ├── continuous-integration/    # CI/CD configurations
@@ -49,8 +52,7 @@ job_match.brau.io/
 
 ## Technologies
 
-- Python 3.11 or higher (recommended for full and continuous support for Google AI libraries)
-    - Python 3.10 also works, but support will be discontinued in 2026
+- Python 3.12
 - SQLite (Desktop Application)
 - Flask 3.0.0 or higher
 - Docker Engine 20.10 or higher
@@ -66,6 +68,44 @@ job_match.brau.io/
 To add a translation file to the project, add a line with the language code in `languages/available_languages` and create a language file with the `.txt` extension in the `languages/` folder. 
 
 The translated content should have a constant before the "=" and the translation after it. Example: `EXIT=Exit`. To facilitate understanding of the file, the values are being organized in alphabetical order.
+
+## Backend API Project
+
+### Installation
+
+1. Create a virtual environment:
+```bash
+python -m venv venv
+```
+
+2. Activate the virtual environment:
+```bash
+# Windows PowerShell
+.\venv\Scripts\Activate.ps1
+
+# Windows CMD
+.\venv\Scripts\activate.bat
+
+# Linux/Mac
+source venv/bin/activate
+```
+
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+### Execution
+
+To run the API:
+
+```bash
+python app.py
+```
+
+### Health Check Endpoint
+- **GET** `/health`
+  - Returns the API status
 
 ## Versioning
 
