@@ -1,10 +1,7 @@
 program JobMatch;
 
 uses
-  Forms,
-  Vcl.Themes,
-  Vcl.Styles,
-  System.SysUtils,
+  Forms, Vcl.Themes, Vcl.Styles, System.SysUtils, System.Classes,
   unMainForm in 'forms\unMainForm.pas' {frmMainForm},
   ChildWin in 'ChildWin.pas' {MDIChild},
   Constants in 'libs\Constants.pas',
@@ -14,12 +11,20 @@ uses
   Config in 'libs\Config.pas',
   unSplash in 'forms\unSplash.pas' {frmSplash},
   unAbout in 'forms\unAbout.pas' {frmAbout},
-  unNewProject in 'forms\unNewProject.pas' {frmNewProject};
+  unNewProject in 'forms\unNewProject.pas' {frmNewProject},
+  unOpenProject in 'forms\unOpenProject.pas' {frmOpenProject};
 
 {$R *.RES}
 
 const
-  TOTAL_FORMS = 3;
+  TOTAL_FORMS = 5;
+
+procedure CreateFormAndUpdateProgress(InstanceClass: TComponentClass; var Reference);
+begin
+  Application.CreateForm(InstanceClass, Reference);
+  frmSplash.pgbProgress.Position := frmSplash.pgbProgress.Position + 1;
+  Sleep(300);
+end;
 
 var
   Version: string;
@@ -37,7 +42,6 @@ begin
   Application.MainFormOnTaskBar := True;
   Application.Title := 'Job Match';
   Application.CreateForm(TfrmMainForm, frmMainForm);
-  Application.CreateForm(TfrmNewProject, frmNewProject);
   frmSplash.pgbProgress.Position := frmSplash.pgbProgress.Position + 1;
 
   // Update Labels
@@ -49,13 +53,10 @@ begin
   ChangeAndRefreshLabel(frmSplash.lblAuthor, Author);
   Sleep(1000);
 
-  Application.CreateForm(TfrmConfiguration, frmConfiguration);
-  frmSplash.pgbProgress.Position := frmSplash.pgbProgress.Position + 1;
-  Sleep(500);
-
-  Application.CreateForm(TfrmAbout, frmAbout);
-  frmSplash.pgbProgress.Position := frmSplash.pgbProgress.Position + 1;
-  Sleep(500);
+  CreateFormAndUpdateProgress(TfrmAbout, frmAbout);
+  CreateFormAndUpdateProgress(TfrmNewProject, frmNewProject);
+  CreateFormAndUpdateProgress(TfrmOpenProject, frmOpenProject);
+  CreateFormAndUpdateProgress(TfrmConfiguration, frmConfiguration);
 
   frmSplash.Close;
   frmSplash.Free;

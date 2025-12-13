@@ -30,6 +30,8 @@ type
     NewProject: string;
     ProjectName: string;
     ProjectDetails: string;
+    OpenProject: string;
+    SelectProject: string;
   end;
 
   TAvailableLanguages = record
@@ -124,6 +126,8 @@ begin
     Aux.NewProject := LoadStringLine(LanguageFile, 'NEW_PROJECT');
     Aux.ProjectName := LoadStringLine(LanguageFile, 'PROJECT_NAME');
     Aux.ProjectDetails := LoadStringLine(LanguageFile, 'PROJECT_DETAILS');
+    Aux.OpenProject := LoadStringLine(LanguageFile, 'OPEN_PROJECT');
+    Aux.SelectProject := LoadStringLine(LanguageFile, 'SELECT_PROJECT');
 
     BuildLanguageLabels := Aux;
   finally

@@ -21,15 +21,13 @@ type
     VirtualImageListMenu: TVirtualImageList;
     tobSeparator1: TToolButton;
     tobConfiguration: TToolButton;
+    tobOpenProject: TToolButton;
     procedure FileNew1Execute(Sender: TObject);
-    procedure FileExit1Execute(Sender: TObject);
-    procedure WindowCascade1Execute(Sender: TObject);
-    procedure WindowTileHorizontal1Execute(Sender: TObject);
-    procedure WindowTileVertical1Execute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure OpenNewProject(Sender: TObject);
     procedure OpenConfigurationDialog(Sender: TObject);
+    procedure OpenOpenProject(Sender: TObject);
   private
     { Private declarations }
     procedure CreateMDIChild(const Name: string);
@@ -51,11 +49,13 @@ implementation
 {$R *.dfm}
 
 uses
-  CHILDWIN, Constants, unConfiguration, Utils, Config, unAbout, unNewProject;
+  CHILDWIN, Constants, unConfiguration, Utils, Config, unAbout, unNewProject,
+  unOpenProject;
 
 var
   MenuProject: TMenuItem;
   MenuProjectNewProject: TMenuItem;
+  MenuProjectOpenProject: TMenuItem;
   MenuProjectSeparator: TMenuItem;
   MenuProjectExit: TMenuItem;
   MenuTools: TMenuItem;
@@ -77,6 +77,12 @@ begin
   MenuProjectNewProject.ShortCut := ShortCut(Ord('N'), [ssCtrl]);
   MenuProjectNewProject.ImageIndex := 0;
   MenuProject.Add(MenuProjectNewProject);
+
+  MenuProjectOpenProject := TMenuItem.Create(MenuProject);
+  MenuProjectOpenProject.OnClick := OpenOpenProject;
+  MenuProjectOpenProject.ShortCut := ShortCut(Ord('O'), [ssCtrl]);
+  MenuProjectOpenProject.ImageIndex := 2;
+  MenuProject.Add(MenuProjectOpenProject);
 
   MenuProjectSeparator := TMenuItem.Create(MenuProject);
   MenuProjectSeparator.Caption := SEPARATOR_MENU;
@@ -155,10 +161,16 @@ begin
   frmNewProject.ShowModal;
 end;
 
+procedure TfrmMainForm.OpenOpenProject(Sender: TObject);
+begin
+  frmOpenProject.ShowModal;
+end;
+
 procedure TfrmMainForm.UpdateLanguage;
 begin
   MenuProject.Caption := Languages.Project;
   MenuProjectNewProject.Caption := Format('%s...', [Languages.NewProject]);
+  MenuProjectOpenProject.Caption := Format('%s...', [Languages.OpenProject]);
   MenuProjectExit.Caption := Languages.Exit;
   MenuTools.Caption := Languages.Tools;
   MenuToolsConfiguration.Caption := Format('%s...', [Languages.Configurations]);
@@ -166,32 +178,11 @@ begin
   MenuHelpAbout.Caption := Format('%s...', [Languages.About]);
 
   tobNewProject.Hint := Languages.NewProject;
+  tobOpenProject.Hint := Languages.OpenProject;
   tobConfiguration.Hint := Languages.Configurations;
 
   frmConfiguration.Caption := Languages.Configurations;
   frmMainForm.Caption := Format('%s - %s', [APPLICATION_NAME, CustomConfig.Version]);
-end;
-
-procedure TfrmMainForm.WindowCascade1Execute(Sender: TObject);
-begin
-  Cascade;
-end;
-
-procedure TfrmMainForm.WindowTileHorizontal1Execute(Sender: TObject);
-begin
-  TileMode := tbHorizontal;
-  Tile;
-end;
-
-procedure TfrmMainForm.WindowTileVertical1Execute(Sender: TObject);
-begin
-  TileMode := tbVertical;
-  Tile;
-end;
-
-procedure TfrmMainForm.FileExit1Execute(Sender: TObject);
-begin
-  Close;
 end;
 
 end.
