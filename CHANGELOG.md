@@ -11,6 +11,7 @@
 - Created the new project dialog to allow the user to create a new project.
 - Created the open project dialog to allow the user to open an existing project.
 - Created a basic flask application to project backend.
+- Created a Docker Image and Docker Compose file for Continuous Integration 
 
 ### Fix
 

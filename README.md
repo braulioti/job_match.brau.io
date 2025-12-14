@@ -30,6 +30,9 @@ New project updates can be followed through X:
     - [Installation](#installation)
     - [Execution](#execution)
     - [Health Check Endpoint](#health-check-endpoint)
+- [Running the Docker Container](#running-the-docker-container)
+    - [Using Docker directly](#using-docker-directly)
+    - [Using Docker Compose](#using-docker-compose)
 - [Versioning](#versioning)
 - [Author](#author)
 
@@ -41,6 +44,9 @@ job_match.brau.io/
 ├── desktop/                   # Desktop Application (Delphi)
 ├── frontend/                  # Frontend (Angular Application)
 ├── continuous-integration/    # CI/CD configurations
+│   ├── .dockerignore          # Files ignored by Docker
+│   ├── Dockerfile             # Docker image definition for the Flask API
+│   └── docker-compose.yml     # Docker Compose configuration for deployment
 ├── installer/                 # Installation scripts
 ├── languages/                 # Language files
 ├── docs/                      # Project documentation
@@ -106,6 +112,25 @@ python app.py
 ### Health Check Endpoint
 - **GET** `/health`
   - Returns the API status
+
+## Running the Docker Container
+
+### Using Docker directly:
+
+```bash
+docker run -d \
+  --name job-match-api \
+  -p 5000:5000 \
+  --restart unless-stopped \
+  job-match-api:latest
+```
+
+### Using Docker Compose:
+
+```bash
+# From the project root
+docker-compose -f continuous-integration/docker-compose.yml up -d
+```
 
 ## Versioning
 
