@@ -19,7 +19,7 @@ def when_ready(server):
     print(f"  {APP_NAME} v{APP_VERSION} is ready!")
     print(f"  Server running on http://{API_HOST}:{API_PORT}")
     print(f"  Workers: {server.num_workers}")
-    print(f"  Threads per worker: 2")
-    print(f"  Access logs: enabled")
+    print("  Threads per worker: 2")
+    print("  Access logs: enabled")
     print(f"{'=' * 152}\n")
 
