@@ -12,6 +12,7 @@
 - Created the open project dialog to allow the user to open an existing project.
 - Created a basic flask application to project backend.
 - Created a Docker Image and Docker Compose file for Continuous Integration 
+- Create a SendMail Service in the backend API
 
 ### Fix
 

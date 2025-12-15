@@ -1,5 +1,6 @@
 import sys
-from flask import Flask
+import os
+from flask import Flask, jsonify
 from routes.routes import routes_bp
 from config import (
     APP_NAME, APP_VERSION, APP_DESCRIPTION, APP_AUTHOR,
@@ -12,28 +13,38 @@ app = Flask(__name__)
 # Registrar as rotas
 app.register_blueprint(routes_bp)
 
+# Debug: List all registered routes
+if API_DEBUG:
+    @app.route('/routes', methods=['GET'])
+    def list_routes():
+        """Debug endpoint to list all registered routes"""
+        routes = []
+        for rule in app.url_map.iter_rules():
+            routes.append({
+                'endpoint': rule.endpoint,
+                'methods': list(rule.methods),
+                'path': str(rule)
+            })
+        return jsonify({'routes': routes}), 200
+
+def load_ascii_logo():
+    """Load template logo from file"""
+    try:
+        logo_path = os.path.join(os.path.dirname(__file__), 'templates', 'ascii_logo.txt')
+        with open(logo_path, 'r', encoding='utf-8') as f:
+            return f.read()
+    except FileNotFoundError:
+        return ""
+    except Exception as e:
+        print(f"Erro ao carregar logo: {e}")
+        return ""
+
 def print_startup_message():
-    """Exibe mensagens informativas sobre a aplicação ao iniciar"""
     # ASCII Art Logo
-    print("                   XXXXXXX     ;;;;;;;;                                                                                                                 ")
-    print("                XXXXXXXXXXXXX;;;;;;;;;;;;;                                                                                                              ")
-    print("              XXXXXXXXXXXXXXXXX;;;;;;;;;;;;;                                                                                                            ")
-    print("            XXXXXXXXXXXXXXXXXXXXx;;;;;;;;;;;;                                                                                                           ")
-    print("          XXXXXXXXXXXXXXXXXXXXXXXX+;;;;;;;;;;;;                                                                                                         ")
-    print("         XXXXXXXXXXXXXXXXXXXXXXXXXX;;;;;;;;;;;;;;                             XXX                                                     ;;;;              ")
-    print("       XXXXXXXXXXXXXXXXXXXXXXXXXXX    ;;;;;;;;;;;;;       XXXXXXX             XXX         ;;;;       ;;;;            ;;;;             ;;;;              ")
-    print("      XXXXXXXXXXXXXXXXXXXXXXXXXX$     ;;;;;;;;;;;;;           XXX     XXXX    XXX XXXX    ;;;;;     ;;;;;  ;;;;;;   ;;;;;;;   ;;;;;;  ;;;;;;;;;         ")
-    print("     XXXXXXXXXXXXXXXX   $XXXXXX     ;;;;;;;;;;;;;;;;          XXX  $XXXXXXXXX XXXXXXXXXX  ;;;;;;   ;;;;;; ;;;;;;;;; ;;;;;;; ;;;;;;;;; ;;;;;;;;;;        ")
-    print("     XXXXXXXXXXXXXX+      $X$     ;;;;;;;;;;;;;;;;;;          XXX XXX$    XXX XXX     XXX ;;; ;;;;;;;;;;;   ;;;;;;;  ;;;;  ;;;;       ;;;;   ;;;;       ")
-    print("     XXXXXXXXXXXXXX;;;          ;;;;;;;;;;;;;;;;;;;;          XXX XXXX    XXX XXX    $XXX ;;;  ;;;;  ;;;; ;;;   ;;;  ;;;;  ;;;;       ;;;;   ;;;;       ")
-    print("      XXXXXXXXXXXXX;;;;;       ;;;;;;;;;;;;;;;;;;;;      XXXXXXXX  $XXXXXXXX  XXXXXXXXXX  ;;;   ;;   ;;;; ;;;;;;;;;  ;;;;;; ;;;;;;;;; ;;;;   ;;;;       ")
-    print("      $XXXXXXXXXXXX+;;;;;    ;;;;;;;;;;;;;;;;;;;;;        XXXXX$     XXX$X    XXX XXX$    ;;;         ;;    ;;;  ;;    ;;;;    ;;;;    ;;     ;;        ")
-    print("        XXXXXXXXXXXXx;;;;;;;;;;;;;;;;;;;;;;;;;;;;                                                                                                       ")
-    print("          XXXXXXXXXXXXx;;;;;;;;;;;;;;;;;;;;;;;;                                                                                                         ")
-    print("            XXXXXXXXXXXX+;;;;;;;;;;;;;;;;;;;;                                                                                                           ")
-    print("             XXXXXXXXXXXXX+;;;;;;;;;;;;;;;;                                                                                                             ")
-    print("               $XXXXXXXXXXXX;;;;;;;;;;;;;                                                                                                               ")
-    print("                  XXXXXXXX     ;;;;;;;                                                                                                                  ")
+    logo = load_ascii_logo()
+    if logo:
+        print(logo)
+
     print("\n" + "=" * 152)
     print(f"  {APP_NAME} v{APP_VERSION}")
     print("=" * 152)
