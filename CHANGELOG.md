@@ -13,6 +13,7 @@
 - Created a basic flask application to project backend.
 - Created a Docker Image and Docker Compose file for Continuous Integration 
 - Create a SendMail Service in the backend API
+- Adjusted the config.py file in the API to load configuration from .env file
 
 ### Fix
 
