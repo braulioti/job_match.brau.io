@@ -101,6 +101,16 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
+4. Configure the environment file:
+```bash
+# Windows PowerShell
+Copy-Item api\env.example api\.env
+
+# Windows CMD / Linux / Mac
+cp api/env.example api/.env
+```
+Edit the `api/.env` file and update the environment variables according to your configuration.
+
 ### Execution
 
 To run the API:

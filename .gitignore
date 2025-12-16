@@ -112,3 +112,7 @@ venv/
 env/
 ENV/
 .venv
+
+# Environment variables
+.env
+api/.env
