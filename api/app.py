@@ -10,6 +10,9 @@ from config import (
 
 app = Flask(__name__)
 
+# Initialize database and run migrations
+from migrations.database import init_database
+
 # Registrar as rotas
 app.register_blueprint(routes_bp)
 
@@ -61,10 +64,18 @@ def print_startup_message():
 if __name__ == '__main__':
     print_startup_message()
     try:
+        # Initialize database and run migrations
+        init_database()
+        print()
+        
+        # Start the Flask application
         app.run(debug=API_DEBUG, host=API_HOST, port=API_PORT)
     except KeyboardInterrupt:
         print("\n\n" + "=" * 70)
         print("  Server stopped by user")
         print("=" * 70 + "\n")
         sys.exit(0)
+    except Exception as e:
+        print(f"\n  ✗ Error starting application: {str(e)}")
+        sys.exit(1)
 
