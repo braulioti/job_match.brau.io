@@ -3,9 +3,15 @@ WSGI entry point for Gunicorn
 """
 from app import app, print_startup_message
 from config import APP_NAME, APP_VERSION, API_HOST, API_PORT
+from migrations.database import init_database
 
 # Print startup message immediately when module loads
 print_startup_message()
+
+# Initialize database and run migrations
+init_database()
+print()
+
 print("  Initializing Gunicorn server...")
 print("=" * 152 + "\n")
 
