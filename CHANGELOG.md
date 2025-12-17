@@ -23,3 +23,4 @@
 - LICENSE file with MIT license has been created.
 - CONTRIBUTING.md file has been added with instructions on how to contribute to the project.
 - README.md has been updated with information about folder structure and technologies used in the project.
+- Added Swagger-based API documentation with multilingual support (en-US and pt-BR) available via /docs.
