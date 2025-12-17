@@ -1,0 +1,95 @@
+openapi: 3.0.3
+info:
+  title: Job Match API
+  description: API for evaluating resumes and job vacancies using Artificial Intelligence
+  version: 1.0.0
+  contact:
+    name: Bráulio Figueiredo
+    email: jobmatch@brau.io
+    url: https://brau.io
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:5000
+    description: Local development server
+  - url: https://api.jobmatch.brau.io
+    description: Production server
+
+tags:
+  - name: Health
+    description: API health check endpoints
+
+paths:
+  /health:
+    get:
+      tags:
+        - Health
+      summary: API health check
+      description: Returns the health status of the API
+      operationId: healthCheck
+      responses:
+        '200':
+          description: API is working correctly
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: healthy
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+        message:
+          type: string
+          description: Error details
+      required:
+        - error
+
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - healthy
+            - unhealthy
+          description: API status
+
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
