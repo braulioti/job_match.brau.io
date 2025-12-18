@@ -15,6 +15,9 @@
 - Create a SendMail Service in the backend API
 - Adjusted the config.py file in the API to load configuration from .env file
 - Integrated PostgreSQL database with SQLAlchemy and Alembic migrations in the API
+- Added user registration endpoint `POST /v1/users` in the backend API.
+
+### Deprecated
 
 ### Fix
 
@@ -24,3 +27,4 @@
 - CONTRIBUTING.md file has been added with instructions on how to contribute to the project.
 - README.md has been updated with information about folder structure and technologies used in the project.
 - Added Swagger-based API documentation with multilingual support (en-US and pt-BR) available via /docs.
+- Updated Swagger documentation to include the new user registration endpoint `POST /v1/users`.

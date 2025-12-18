@@ -1,11 +1,17 @@
 import sys
 import os
 from flask import Flask, jsonify
-from routes.routes import routes_bp
+from routes import routes_bp, user_bp
 from config import (
-    APP_NAME, APP_VERSION, APP_DESCRIPTION, APP_AUTHOR,
-    APP_AUTHOR_EMAIL, APP_AUTHOR_WEBSITE,
-    API_HOST, API_PORT, API_DEBUG
+    APP_NAME,
+    APP_VERSION,
+    APP_DESCRIPTION,
+    APP_AUTHOR,
+    APP_AUTHOR_EMAIL,
+    APP_AUTHOR_WEBSITE,
+    API_HOST,
+    API_PORT,
+    API_DEBUG,
 )
 
 app = Flask(__name__)
@@ -15,6 +21,7 @@ from migrations.database import init_database
 
 # Registrar as rotas
 app.register_blueprint(routes_bp)
+app.register_blueprint(user_bp)
 
 # Debug: List all registered routes
 if API_DEBUG:

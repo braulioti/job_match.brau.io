@@ -1,7 +1,14 @@
 openapi: 3.0.3
 info:
   title: Job Match API
-  description: API para avaliação de currículos e vagas de emprego usando Inteligência Artificial
+  description: |
+    ## API para avaliação de currículos e vagas de emprego usando Inteligência Artificial
+
+    ### Changelog
+
+    **Versão 1.0.0**
+    - Implementado `POST /v1/users` para criação de usuários com autenticação
+
   version: 1.0.0
   contact:
     name: Bráulio Figueiredo
@@ -20,6 +27,8 @@ servers:
 tags:
   - name: Health
     description: Endpoints de verificação de saúde da API
+  - name: Usuários
+    description: Endpoints para gerenciamento de usuários
 
 paths:
   /health:
@@ -40,6 +49,38 @@ paths:
                   status:
                     type: string
                     example: healthy
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/users:
+    post:
+      tags:
+        - Usuários
+      summary: Criação de usuário
+      description: Cria um novo usuário com e-mail e senha válidos.
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+      responses:
+        '201':
+          description: Usuário criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Dados inválidos ou e-mail já cadastrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '500':
           description: Erro interno do servidor
           content:
@@ -70,6 +111,44 @@ components:
             - healthy
             - unhealthy
           description: Status da API
+    CreateUserRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: Endereço de e-mail do usuário
+        password:
+          type: string
+          format: password
+          description: Senha do usuário (mínimo 8 caracteres, com letra, número e caractere especial)
+          pattern: '^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>_\-+=;''/\\\[\]])[A-Za-z\d!@#$%^&*(),.?":{}|<>_\-+=;''/\\\[\]]{8,}$'
+      required:
+        - email
+        - password
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Identificador único do usuário
+        email:
+          type: string
+          format: email
+          description: Endereço de e-mail do usuário
+        hash:
+          type: string
+          description: Hash UUID v4 associado ao usuário
+        created_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Data de criação do usuário
+      required:
+        - id
+        - email
+        - hash
 
   responses:
     NotFound:
