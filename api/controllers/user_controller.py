@@ -2,7 +2,7 @@ from flask import request, jsonify
 
 from api.dtos.create_user_dto import CreateUserDTO
 from api.dtos.response_user_dto import ResponseUserDTO
-from api.services.user_service import user_service, UserService
+from api.services.user_service import UserService
 
 
 class UserController:

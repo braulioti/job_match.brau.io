@@ -1,6 +1,6 @@
 from flask import request, render_template
 
-from api.services.swagger_service import swagger_service, SwaggerService
+from api.services.swagger_service import SwaggerService
 
 
 class SwaggerController:
