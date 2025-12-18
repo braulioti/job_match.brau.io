@@ -110,4 +110,3 @@ def init_database():
             print(f"  ✗ Error: Could not initialize database: {str(db_error)}")
             raise
 
-

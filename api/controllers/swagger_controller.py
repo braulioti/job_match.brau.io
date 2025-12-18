@@ -1,28 +1,36 @@
 from flask import request, render_template
 
-from api.services.swagger_service import load_openapi_spec
+from api.services.swagger_service import SwaggerService
 
 
-def get_openapi_spec():
+class SwaggerController:
     """
-    Controller para retornar o arquivo OpenAPI em YAML.
-
-    Query params:
-      - language: en-US (default) ou pt-BR
+    Controller responsável por orquestrar as ações relacionadas
+    à documentação Swagger / OpenAPI.
     """
-    language = request.args.get("language", "en-US")
-    return load_openapi_spec(language)
 
+    service: SwaggerService
 
-def get_swagger_docs():
-    """
-    Controller para renderizar o Swagger UI.
+    def __init__(self) -> None:
+        self.service = SwaggerService()
 
-    Query params:
-      - language: en-US (default) ou pt-BR
-    """
-    language = request.args.get("language", "en-US")
-    return render_template("swagger.html", language=language)
+    def get_openapi_spec(self):
+        """
+        Retorna o arquivo OpenAPI em YAML.
 
+        Query params:
+          - language: en-US (default) ou pt-BR
+        """
+        language = request.args.get("language", "en-US")
+        return self.service.load_openapi_spec(language)
 
+    @staticmethod
+    def get_swagger_docs():
+        """
+        Renderiza o Swagger UI.
 
+        Query params:
+          - language: en-US (default) ou pt-BR
+        """
+        language = request.args.get("language", "en-US")
+        return render_template("swagger.html", language=language)
