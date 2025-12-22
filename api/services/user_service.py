@@ -3,10 +3,15 @@ User service
 Business logic and database operations related to users.
 """
 
+from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 from werkzeug.security import generate_password_hash
+import jwt
 
+from api.config import JWT_SECRET_KEY, JWT_ALGORITHM, JWT_EXPIRATION_HOURS
 from api.dtos.create_user_dto import CreateUserDTO
+from api.dtos.login_user_dto import LoginUserDTO
+from api.dtos.response_user_login_dto import ResponseUserLoginDTO
 from api.migrations.database import SessionLocal
 from api.models.user import User
 
@@ -35,11 +40,60 @@ class UserService:
                 raise ValueError("User with this email already exists.")
 
             hashed_password = generate_password_hash(dto.password)
-            user = User(email=dto.email, password=hashed_password, hash=dto.hash)
+            user = User(
+                email=dto.email,
+                password=hashed_password,
+                hash=dto.hash,
+                hash_validated=dto.hash_validated
+            )
             db.add(user)
             db.commit()
             db.refresh(user)
             return user
+        finally:
+            db.close()
+
+    def login(self, dto: LoginUserDTO) -> ResponseUserLoginDTO:
+        """
+        Authenticate user and generate JWT token.
+
+        - Validates email and password
+        - Updates last_login timestamp
+        - Generates JWT token
+        - Returns ResponseUserLoginDTO with token, hash and validated status
+
+        :raises ValueError: if email or password is invalid
+        """
+        db: Session = self._get_session()
+        try:
+            # Find user by email
+            user = db.query(User).filter_by(email=dto.email).first()
+            if not user:
+                raise ValueError("Invalid email or password.")
+
+            # Validate password
+            if not user.check_password(dto.password):
+                raise ValueError("Invalid email or password.")
+
+            # Update last_login
+            user.last_login = datetime.utcnow()
+            db.commit()
+            db.refresh(user)
+
+            # Generate JWT token
+            payload = {
+                "user_id": user.id,
+                "email": user.email,
+                "exp": datetime.utcnow() + timedelta(hours=JWT_EXPIRATION_HOURS),
+                "iat": datetime.utcnow()
+            }
+            token = jwt.encode(payload, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
+            # Ensure token is a string (PyJWT returns string in version 2.x)
+            if isinstance(token, bytes):
+                token = token.decode('utf-8')
+
+            # Return response DTO
+            return ResponseUserLoginDTO(token=token, user=user)
         finally:
             db.close()
 

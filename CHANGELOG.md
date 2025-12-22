@@ -16,6 +16,11 @@
 - Adjusted the config.py file in the API to load configuration from .env file
 - Integrated PostgreSQL database with SQLAlchemy and Alembic migrations in the API
 - Added user registration endpoint `POST /v1/users` in the backend API.
+- Added migration to include `validated` (boolean) and `hash_validated` (UUID v4) fields in the user table.
+- Implemented user login endpoint `POST /v1/users/login` with JWT (JSON Web Token) authentication.
+- Added JWT configuration support (secret key, algorithm, expiration hours) in the API configuration.
+- Updated user model to include validation status fields.
+- Created LoginUserDTO and ResponseUserLoginDTO for authentication flow.
 
 ### Deprecated
 
@@ -28,3 +33,5 @@
 - README.md has been updated with information about folder structure and technologies used in the project.
 - Added Swagger-based API documentation with multilingual support (en-US and pt-BR) available via /docs.
 - Updated Swagger documentation to include the new user registration endpoint `POST /v1/users`.
+- Updated Swagger documentation to include the new user login endpoint `POST /v1/users/login` with JWT authentication.
+- Standardized Swagger schema names to match DTO classes (CreateUserDTO, LoginUserDTO, ResponseUserDTO, ResponseUserLoginDTO).

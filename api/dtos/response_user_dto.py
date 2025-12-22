@@ -18,6 +18,7 @@ class ResponseUserDTO:
     id: int
     email: str
     hash: str
+    hash_validated: str
     created_at: str | None = None
 
     def __init__(self, user: User) -> None:
@@ -30,6 +31,7 @@ class ResponseUserDTO:
         self.created_at = (
             user.created_at.isoformat() if getattr(user, "created_at", None) else None
         )
+        self.hash_validated = user.hash_validated
 
     def to_dict(self) -> Dict[str, Any]:
         """
@@ -37,8 +39,9 @@ class ResponseUserDTO:
         """
         return {
             "id": self.id,
-            "created_at": self.created_at if self.created_at else None,
+            "createdAt": self.created_at if self.created_at else None,
             "email": self.email,
             "hash": self.hash,
+            "hashValidated": self.hash_validated
         }
 

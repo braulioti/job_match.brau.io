@@ -19,3 +19,12 @@ def create_user_route():
     """
     return user_controller.create_user()
 
+@user_bp.route("/login", methods=["POST"])
+def login_route():
+    """
+    Route for user login and authentication.
+
+    Delegates the logic to the user controller.
+    """
+    return user_controller.login()
+

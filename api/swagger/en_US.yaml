@@ -8,6 +8,7 @@ info:
 
     **Version 1.0.0**
     - Implemented `POST /v1/users` for user creation with authentication-ready data
+    - Implemented `POST /v1/users/login` for user login using JWT (JSON Web Token) authentication
   version: 1.0.0
   contact:
     name: Bráulio Figueiredo
@@ -66,16 +67,48 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUserRequest'
+              $ref: '#/components/schemas/CreateUserDTO'
       responses:
         '201':
           description: User successfully created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResponse'
+                $ref: '#/components/schemas/ResponseUserDTO'
         '400':
           description: Invalid data or email already registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/users/login:
+    post:
+      tags:
+        - Users
+      summary: User authentication
+      description: Authenticates a user with email and password, returning a JWT token.
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUserDTO'
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUserLoginDTO'
+        '401':
+          description: Invalid credentials
           content:
             application/json:
               schema:
@@ -110,7 +143,7 @@ components:
             - healthy
             - unhealthy
           description: API status
-    CreateUserRequest:
+    CreateUserDTO:
       type: object
       properties:
         email:
@@ -125,7 +158,41 @@ components:
       required:
         - email
         - password
-    UserResponse:
+    LoginUserDTO:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: User email address
+        password:
+          type: string
+          format: password
+          description: User password (minimum 8 characters, with letter, number and special character)
+          pattern: '^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>_\-+=;''/\\\[\]])[A-Za-z\d!@#$%^&*(),.?":{}|<>_\-+=;''/\\\[\]]{8,}$'
+      required:
+        - email
+        - password
+    ResponseUserLoginDTO:
+      type: object
+      properties:
+        token:
+          type: string
+          description: JWT token for authentication
+          example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6InVzdWFyaW9AZXhhbXBsZS5jb20iLCJleHAiOjE3MzQ4NzIwMDAsImlhdCI6MTczNDc4NTYwMH0.example_signature"
+        hash:
+          type: string
+          description: UUID v4 hash associated with the user for authentication
+          example: "4239cb5c-b06a-4841-a685-7714901cc920"
+        validated:
+          type: boolean
+          description: User validation status
+          example: false
+      required:
+        - token
+        - hash
+        - validated
+    ResponseUserDTO:
       type: object
       properties:
         id:
