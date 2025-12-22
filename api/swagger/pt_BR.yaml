@@ -8,6 +8,7 @@ info:
 
     **Versão 1.0.0**
     - Implementado `POST /v1/users` para criação de usuários com autenticação
+    - Implementado `POST /v1/users/login` para login de usuários usando autenticação JWT (JSON Web Token)
 
   version: 1.0.0
   contact:
@@ -67,16 +68,48 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUserRequest'
+              $ref: '#/components/schemas/CreateUserDTO'
       responses:
         '201':
           description: Usuário criado com sucesso
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResponse'
+                $ref: '#/components/schemas/ResponseUserDTO'
         '400':
           description: Dados inválidos ou e-mail já cadastrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/users/login:
+    post:
+      tags:
+        - Usuários
+      summary: Autenticação de usuário
+      description: Autentica um usuário com e-mail e senha, retornando um token JWT.
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUserDTO'
+      responses:
+        '200':
+          description: Autenticação realizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUserLoginDTO'
+        '401':
+          description: Credenciais inválidas
           content:
             application/json:
               schema:
@@ -111,7 +144,7 @@ components:
             - healthy
             - unhealthy
           description: Status da API
-    CreateUserRequest:
+    CreateUserDTO:
       type: object
       properties:
         email:
@@ -126,7 +159,41 @@ components:
       required:
         - email
         - password
-    UserResponse:
+    LoginUserDTO:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: Endereço de e-mail do usuário
+        password:
+          type: string
+          format: password
+          description: Senha do usuário (mínimo 8 caracteres, com letra, número e caractere especial)
+          pattern: '^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>_\-+=;''/\\\[\]])[A-Za-z\d!@#$%^&*(),.?":{}|<>_\-+=;''/\\\[\]]{8,}$'
+      required:
+        - email
+        - password
+    ResponseUserLoginDTO:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Token JWT para autenticação
+          example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6InVzdWFyaW9AZXhhbXBsZS5jb20iLCJleHAiOjE3MzQ4NzIwMDAsImlhdCI6MTczNDc4NTYwMH0.example_signature"
+        hash:
+          type: string
+          description: Hash UUID v4 associado ao usuário para autenticação
+          example: "4239cb5c-b06a-4841-a685-7714901cc920"
+        validated:
+          type: boolean
+          description: Status de validação do usuário
+          example: false
+      required:
+        - token
+        - hash
+        - validated
+    ResponseUserDTO:
       type: object
       properties:
         id:
@@ -139,16 +206,21 @@ components:
           description: Endereço de e-mail do usuário
         hash:
           type: string
-          description: Hash UUID v4 associado ao usuário
-        created_at:
+          description: Hash UUID v4 associado ao usuário para autenticação
+        hashValidated:
+          type: string
+          description: Hash UUID v4 associado ao usuário para validação
+        createdAt:
           type: string
           format: date-time
-          nullable: true
           description: Data de criação do usuário
+          example: "2025-12-22T03:50:08.902104"
       required:
         - id
         - email
         - hash
+        - hashValidated
+        - createdAt
 
   responses:
     NotFound:

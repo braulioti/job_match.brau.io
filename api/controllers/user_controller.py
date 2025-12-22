@@ -1,6 +1,7 @@
 from flask import request, jsonify
 
 from api.dtos.create_user_dto import CreateUserDTO
+from api.dtos.login_user_dto import LoginUserDTO
 from api.dtos.response_user_dto import ResponseUserDTO
 from api.services.user_service import UserService
 
@@ -31,6 +32,32 @@ class UserController:
             return jsonify(ResponseUserDTO(user).to_dict()), 201
         except ValueError as e:
             return jsonify({"error": str(e)}), 400
+        except Exception as e:
+            return (
+                jsonify(
+                    {"error": "Internal server error", "message": str(e)}
+                ),
+                500,
+            )
+
+    def login(self):
+        """
+        Handle user login and authentication.
+
+        Expects a JSON body with:
+          - email: str
+          - password: str
+
+        Returns JWT token, user hash and validated status.
+        """
+        data = request.get_json(silent=True) or {}
+
+        try:
+            dto = LoginUserDTO(data)
+            response = self.service.login(dto)
+            return jsonify(response.to_dict()), 200
+        except ValueError as e:
+            return jsonify({"error": str(e)}), 401
         except Exception as e:
             return (
                 jsonify(

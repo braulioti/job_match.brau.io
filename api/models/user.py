@@ -5,7 +5,7 @@ Model for storing user information using SQLAlchemy ORM.
 
 from datetime import datetime
 
-from sqlalchemy import Column, String, DateTime
+from sqlalchemy import Column, String, DateTime, Boolean
 from sqlalchemy.orm import Session
 from werkzeug.security import check_password_hash
 
@@ -35,6 +35,18 @@ class User(BaseModel):
         unique=True,
         comment="UUID v4 hash for authentication",
     )
+    validated = Column(
+        Boolean,
+        nullable=False,
+        default=False,
+        comment="User validation status",
+    )
+    hash_validated = Column(
+        String(36),
+        nullable=True,
+        unique=True,
+        comment="UUID v4 hash for validation",
+    )
     last_login = Column(
         DateTime,
         nullable=True,
@@ -62,6 +74,8 @@ class User(BaseModel):
             "id": self.id,
             "email": self.email,
             "hash": self.hash,
+            "validated": self.validated,
+            "hash_validated": self.hash_validated,
             "last_login": self.last_login.isoformat() if self.last_login else None,
             "created_at": self.created_at.isoformat()
             if self.created_at
@@ -100,6 +114,15 @@ class User(BaseModel):
         db: Session = User._get_session()
         try:
             return db.query(User).filter_by(hash=hash_value).first()
+        finally:
+            db.close()
+
+    @staticmethod
+    def find_by_hash_validated(hash_validated_value: str):
+        """Find user by hash_validated."""
+        db: Session = User._get_session()
+        try:
+            return db.query(User).filter_by(hash_validated=hash_validated_value).first()
         finally:
             db.close()
 
