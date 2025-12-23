@@ -21,6 +21,7 @@
 - Added JWT configuration support (secret key, algorithm, expiration hours) in the API configuration.
 - Updated user model to include validation status fields.
 - Created LoginUserDTO and ResponseUserLoginDTO for authentication flow.
+- Implemented user login validation endpoint `PUT /v1/users/validate-login/{hash}` to validate user login using validation hash.
 
 ### Deprecated
 
@@ -34,4 +35,5 @@
 - Added Swagger-based API documentation with multilingual support (en-US and pt-BR) available via /docs.
 - Updated Swagger documentation to include the new user registration endpoint `POST /v1/users`.
 - Updated Swagger documentation to include the new user login endpoint `POST /v1/users/login` with JWT authentication.
+- Updated Swagger documentation to include the new user login validation endpoint `PUT /v1/users/validate-login/{hash}`.
 - Standardized Swagger schema names to match DTO classes (CreateUserDTO, LoginUserDTO, ResponseUserDTO, ResponseUserLoginDTO).

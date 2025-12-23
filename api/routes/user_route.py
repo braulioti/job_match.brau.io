@@ -28,3 +28,13 @@ def login_route():
     """
     return user_controller.login()
 
+@user_bp.route("/validate-login/<hash>", methods=["PUT"])
+def validate_login_route(hash: str):
+    """
+    Route for user login validation.
+
+    Receives hash_validated as path parameter.
+    Delegates the logic to the user controller.
+    """
+    return user_controller.validate_login(hash)
+
