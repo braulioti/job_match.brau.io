@@ -9,6 +9,7 @@ info:
     **Version 1.0.0**
     - Implemented `POST /v1/users` for user creation with authentication-ready data
     - Implemented `POST /v1/users/login` for user login using JWT (JSON Web Token) authentication
+    - Implemented `PUT /v1/users/validate-login/{hash}` for user login validation
   version: 1.0.0
   contact:
     name: Bráulio Figueiredo
@@ -119,6 +120,41 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /v1/users/validate-login/{hash}:
+    put:
+      tags:
+        - Users
+      summary: User login validation
+      description: Validates a user login using the validation hash, updating the validation status to true.
+      operationId: validateLoginUser
+      parameters:
+        - name: hash
+          in: path
+          required: true
+          description: User validation hash (UUID v4)
+          schema:
+            type: string
+            format: uuid
+            example: "33f78d0d-5404-4820-9b57-cdcd90010aa7"
+      responses:
+        '200':
+          description: Login validated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUserDTO'
+        '404':
+          description: Invalid or not found validation hash
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
 components:
   schemas:
@@ -205,16 +241,21 @@ components:
           description: User email address
         hash:
           type: string
-          description: UUID v4 hash associated with the user
-        created_at:
+          description: UUID v4 hash associated with the user for authentication
+        hashValidated:
+          type: string
+          description: UUID v4 hash associated with the user for validation
+        createdAt:
           type: string
           format: date-time
-          nullable: true
           description: User creation date
+          example: "2025-12-22T03:50:08.902104"
       required:
         - id
         - email
         - hash
+        - hashValidated
+        - createdAt
 
   responses:
     NotFound:

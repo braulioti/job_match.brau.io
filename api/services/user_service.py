@@ -11,6 +11,7 @@ import jwt
 from api.config import JWT_SECRET_KEY, JWT_ALGORITHM, JWT_EXPIRATION_HOURS
 from api.dtos.create_user_dto import CreateUserDTO
 from api.dtos.login_user_dto import LoginUserDTO
+from api.dtos.response_user_dto import ResponseUserDTO
 from api.dtos.response_user_login_dto import ResponseUserLoginDTO
 from api.migrations.database import SessionLocal
 from api.models.user import User
@@ -94,6 +95,34 @@ class UserService:
 
             # Return response DTO
             return ResponseUserLoginDTO(token=token, user=user)
+        finally:
+            db.close()
+
+    def validate_login(self, hash_validated: str) -> ResponseUserDTO:
+        """
+        Validate user login by hash_validated.
+
+        - Finds user by hash_validated
+        - Updates validated field to True
+        - Returns ResponseUserDTO with user data
+
+        :param hash_validated: Hash validation string (UUID v4)
+        :raises ValueError: if user with hash_validated is not found
+        """
+        db: Session = self._get_session()
+        try:
+            # Find user by hash_validated
+            user = db.query(User).filter_by(hash_validated=hash_validated).first()
+            if not user:
+                raise ValueError("Invalid validation hash.")
+
+            # Update validated status
+            user.validated = True
+            db.commit()
+            db.refresh(user)
+
+            # Return response DTO
+            return ResponseUserDTO(user)
         finally:
             db.close()
 

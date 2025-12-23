@@ -66,3 +66,24 @@ class UserController:
                 500,
             )
 
+    def validate_login(self, hash_validated: str):
+        """
+        Handle user login validation.
+
+        Receives hash_validated as path parameter.
+
+        Returns ResponseUserDTO with validated user data.
+        """
+        try:
+            response = self.service.validate_login(hash_validated)
+            return jsonify(response.to_dict()), 200
+        except ValueError as e:
+            return jsonify({"error": str(e)}), 404
+        except Exception as e:
+            return (
+                jsonify(
+                    {"error": "Internal server error", "message": str(e)}
+                ),
+                500,
+            )
+
