@@ -21,6 +21,7 @@
 - Added JWT configuration support (secret key, algorithm, expiration hours) in the API configuration.
 - Updated user model to include validation status fields.
 - Created LoginUserDTO and ResponseUserLoginDTO for authentication flow.
+- Created File model with relationship to User model and static methods for file lookup (by ID, hash, checksum, user_id).
 
 ### Deprecated
 

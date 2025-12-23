@@ -2,7 +2,7 @@
 
 Revision ID: 002_add_validated_to_user
 Revises: 001_create_user_table
-Create Date: 2024-01-03 00:00:00.000000
+Create Date: 2015-12-22 00:00:00.000000
 
 """
 from alembic import op
