@@ -32,6 +32,9 @@ type
     ProjectDetails: string;
     OpenProject: string;
     SelectProject: string;
+    Login: string;
+    Password: string;
+    Email: string;
   end;
 
   TAvailableLanguages = record
@@ -128,6 +131,9 @@ begin
     Aux.ProjectDetails := LoadStringLine(LanguageFile, 'PROJECT_DETAILS');
     Aux.OpenProject := LoadStringLine(LanguageFile, 'OPEN_PROJECT');
     Aux.SelectProject := LoadStringLine(LanguageFile, 'SELECT_PROJECT');
+    Aux.Login := LoadStringLine(LanguageFile, 'LOGIN');
+    Aux.Password := LoadStringLine(LanguageFile, 'PASSWORD');
+    Aux.Email := LoadStringLine(LanguageFile, 'EMAIL');
 
     BuildLanguageLabels := Aux;
   finally

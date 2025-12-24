@@ -156,6 +156,14 @@
         <DCCReference Include="forms\unOpenProject.pas">
             <Form>frmOpenProject</Form>
         </DCCReference>
+        <DCCReference Include="forms\unLogin.pas">
+            <Form>frmLogin</Form>
+        </DCCReference>
+        <DCCReference Include="data_modules\unMainDataModule.pas">
+            <Form>dtmMainDataModule</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
