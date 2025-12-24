@@ -22,7 +22,7 @@
 - Updated user model to include validation status fields.
 - Created LoginUserDTO and ResponseUserLoginDTO for authentication flow.
 - Implemented user login validation endpoint `PUT /v1/users/validate-login/{hash}` to validate user login using validation hash.
-- Implemented login screen in the desktop application.
+- Implemented login screen in the desktop application
 
 ### Deprecated
 
