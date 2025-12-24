@@ -75,6 +75,7 @@ begin
     JsonBody.Free;
   end;
 end;
+uses unMainForm;
 
 procedure TfrmLogin.FormActivate(Sender: TObject);
 begin
