@@ -126,6 +126,47 @@ class UserService:
         finally:
             db.close()
 
+    def hash_login(self, hash_value: str) -> ResponseUserLoginDTO:
+        """
+        Authenticate user by hash and generate JWT token.
+
+        - Finds user by hash
+        - Updates last_login timestamp
+        - Generates JWT token
+        - Returns ResponseUserLoginDTO with token, hash and validated status
+
+        :param hash_value: Hash string (UUID v4) for authentication
+        :raises ValueError: if hash is invalid or user not found
+        """
+        db: Session = self._get_session()
+        try:
+            # Find user by hash
+            user = db.query(User).filter_by(hash=hash_value).first()
+            if not user:
+                raise ValueError("Invalid hash.")
+
+            # Update last_login
+            user.last_login = datetime.utcnow()
+            db.commit()
+            db.refresh(user)
+
+            # Generate JWT token
+            payload = {
+                "user_id": user.id,
+                "email": user.email,
+                "exp": datetime.utcnow() + timedelta(hours=JWT_EXPIRATION_HOURS),
+                "iat": datetime.utcnow()
+            }
+            token = jwt.encode(payload, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
+            # Ensure token is a string (PyJWT returns string in version 2.x)
+            if isinstance(token, bytes):
+                token = token.decode('utf-8')
+
+            # Return response DTO
+            return ResponseUserLoginDTO(token=token, user=user)
+        finally:
+            db.close()
+
 
 # Instância única do serviço para ser usada nos controllers
 user_service = UserService()
