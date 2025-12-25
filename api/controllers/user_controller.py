@@ -87,3 +87,24 @@ class UserController:
                 500,
             )
 
+    def hash_login(self, hash_value: str):
+        """
+        Handle user login using hash.
+
+        Receives hash as path parameter.
+
+        Returns JWT token, user hash and validated status.
+        """
+        try:
+            response = self.service.hash_login(hash_value)
+            return jsonify(response.to_dict()), 200
+        except ValueError as e:
+            return jsonify({"error": str(e)}), 401
+        except Exception as e:
+            return (
+                jsonify(
+                    {"error": "Internal server error", "message": str(e)}
+                ),
+                500,
+            )
+
