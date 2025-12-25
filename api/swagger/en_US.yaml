@@ -10,6 +10,8 @@ info:
     - Implemented `POST /v1/users` for user creation with authentication-ready data
     - Implemented `POST /v1/users/login` for user login using JWT (JSON Web Token) authentication
     - Implemented `PUT /v1/users/validate-login/{hash}` for user login validation
+    - Implemented `POST /v1/users/hash-login/{hash}` for user authentication using hash
+
   version: 1.0.0
   contact:
     name: Bráulio Figueiredo
@@ -145,6 +147,41 @@ paths:
                 $ref: '#/components/schemas/ResponseUserDTO'
         '404':
           description: Invalid or not found validation hash
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/users/hash-login/{hash_value}:
+    post:
+      tags:
+        - Users
+      summary: User authentication by hash
+      description: Authenticates a user using the authentication hash, returning a JWT token.
+      operationId: hashLoginUser
+      parameters:
+        - name: hash_value
+          in: path
+          required: true
+          description: User authentication hash (UUID v4)
+          schema:
+            type: string
+            format: uuid
+            example: "4239cb5c-b06a-4841-a685-7714901cc920"
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUserLoginDTO'
+        '401':
+          description: Invalid or not found hash
           content:
             application/json:
               schema:
