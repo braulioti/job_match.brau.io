@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request, jsonify, render_template
 
 from api.dtos.create_user_dto import CreateUserDTO
 from api.dtos.login_user_dto import LoginUserDTO
@@ -72,11 +72,11 @@ class UserController:
 
         Receives hash_validated as path parameter.
 
-        Returns ResponseUserDTO with validated user data.
+        Returns HTML page with validation success message.
         """
         try:
             response = self.service.validate_login(hash_validated)
-            return jsonify(response.to_dict()), 200
+            return render_template('account_validated.html')
         except ValueError as e:
             return jsonify({"error": str(e)}), 404
         except Exception as e:
