@@ -75,7 +75,7 @@ class UserController:
         Returns HTML page with validation success message.
         """
         try:
-            response = self.service.validate_login(hash_validated)
+            self.service.validate_login(hash_validated)
             return render_template('account_validated.html')
         except ValueError as e:
             return jsonify({"error": str(e)}), 404

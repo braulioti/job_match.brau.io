@@ -17,6 +17,8 @@ from api.helpers.email_helper import EmailHelper
 from api.migrations.database import SessionLocal
 from api.models.user import User
 
+from flask import render_template
+
 class UserService:
     """
     Service responsável pelas operações de usuário.
@@ -112,8 +114,6 @@ class UserService:
             return
         
         try:
-            from flask import render_template, current_app
-            
             # Build validation URL
             validation_url = f"http://{API_HOST}:{API_PORT}/v1/users/validate-login/{user.hash_validated}"
             
