@@ -18,6 +18,7 @@ from api.migrations.database import SessionLocal
 from api.models.user import User
 
 from flask import render_template
+from api.dtos.email_message_dto import EmailMessageDTO
 
 class UserService:
     """
@@ -135,12 +136,13 @@ class UserService:
             
             # Send email
             email_helper = EmailHelper()
-            email_helper.send_html_email(
+            email_dto = EmailMessageDTO(
                 to=user.email,
                 subject="Validate your JobMatch account",
-                html_content=html_content,
-                plain_text_fallback=f"Please validate your account by clicking this link: {validation_url}"
+                body=f"Please validate your account by clicking this link: {validation_url}",
+                html_body=html_content
             )
+            email_helper.send_html_email(email_dto)
         except Exception as e:
             # Log error but don't fail user creation if email fails
             print(f"Warning: Failed to send validation email to {user.email}: {str(e)}")

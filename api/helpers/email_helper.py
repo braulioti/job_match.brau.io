@@ -149,44 +149,51 @@ class EmailHelper:
             message.attach(text_part)
         
         # Add attachments
-        if dto.attachments:
-            for file_path in dto.attachments:
-                if os.path.exists(file_path):
-                    with open(file_path, "rb") as attachment:
-                        part = MIMEBase("application", "octet-stream")
-                        part.set_payload(attachment.read())
-                    
-                    encoders.encode_base64(part)
-                    filename = os.path.basename(file_path)
-                    part.add_header(
-                        "Content-Disposition",
-                        f"attachment; filename= {filename}",
-                    )
-                    message.attach(part)
+        self._add_attachments(message, dto.attachments)
         
         return message, recipients
     
+    def _add_attachments(
+        self,
+        message: MIMEMultipart,
+        attachments: Optional[List[str]]
+    ) -> None:
+        """
+        Add file attachments to an email message.
+        
+        Args:
+            message: MIMEMultipart message to attach files to
+            attachments: Optional list of file paths to attach
+            
+        Note:
+            Only existing files will be attached. Non-existent files are silently skipped.
+        """
+        if not attachments:
+            return
+        
+        for file_path in attachments:
+            if os.path.exists(file_path):
+                with open(file_path, "rb") as attachment:
+                    part = MIMEBase("application", "octet-stream")
+                    part.set_payload(attachment.read())
+                
+                encoders.encode_base64(part)
+                filename = os.path.basename(file_path)
+                part.add_header(
+                    "Content-Disposition",
+                    f"attachment; filename= {filename}",
+                )
+                message.attach(part)
+    
     def send_email(
         self,
-        to: str | List[str],
-        subject: str,
-        body: str,
-        html_body: Optional[str] = None,
-        cc: Optional[str | List[str]] = None,
-        bcc: Optional[str | List[str]] = None,
-        attachments: Optional[List[str]] = None
+        dto: EmailMessageDTO
     ) -> bool:
         """
         Send an email via SMTP
         
         Args:
-            to: Recipient email address(es) - string or list of strings
-            subject: Email subject
-            body: Plain text email body
-            html_body: Optional HTML email body (if provided, email will be multipart)
-            cc: Optional CC recipient(s) - string or list of strings
-            bcc: Optional BCC recipient(s) - string or list of strings
-            attachments: Optional list of file paths to attach
+            dto: EmailMessageDTO containing all email message data
             
         Returns:
             bool: True if email was sent successfully, False otherwise
@@ -195,15 +202,6 @@ class EmailHelper:
             Exception: If email sending fails
         """
         try:
-            dto = EmailMessageDTO(
-                to=to,
-                subject=subject,
-                body=body,
-                html_body=html_body,
-                cc=cc,
-                bcc=bcc,
-                attachments=attachments
-            )
             message, recipients = self._build_message(dto)
             
             # Create secure connection and send email
@@ -249,38 +247,33 @@ class EmailHelper:
     
     def send_html_email(
         self,
-        to: str | List[str],
-        subject: str,
-        html_content: str,
-        plain_text_fallback: Optional[str] = None,
-        cc: Optional[str | List[str]] = None,
-        bcc: Optional[str | List[str]] = None,
-        attachments: Optional[List[str]] = None
+        dto: EmailMessageDTO
     ) -> bool:
         """
         Send an HTML email with optional plain text fallback
         
         Args:
-            to: Recipient email address(es)
-            subject: Email subject
-            html_content: HTML email content
-            plain_text_fallback: Optional plain text version
-            cc: Optional CC recipient(s)
-            bcc: Optional BCC recipient(s)
-            attachments: Optional list of file paths to attach
+            dto: EmailMessageDTO containing all email message data.
+                 The html_body field should contain the HTML content.
+                 If body is not provided, a default plain text fallback will be used.
             
         Returns:
             bool: True if email was sent successfully
         """
-        return self.send_email(
-            to=to,
-            subject=subject,
-            body=plain_text_fallback or "Please view this email in an HTML-compatible email client.",
-            html_body=html_content,
-            cc=cc,
-            bcc=bcc,
-            attachments=attachments
-        )
+        # Ensure plain text fallback if not provided
+        if not dto.body:
+            email_dto = EmailMessageDTO(
+                to=dto.to,
+                subject=dto.subject,
+                body="Please view this email in an HTML-compatible email client.",
+                html_body=dto.html_body,
+                cc=dto.cc,
+                bcc=dto.bcc,
+                attachments=dto.attachments
+            )
+            return self.send_email(email_dto)
+        
+        return self.send_email(dto)
 
 
 # Convenience function for quick email sending
@@ -289,7 +282,9 @@ def send_email(
     subject: str,
     body: str,
     html_body: Optional[str] = None,
-    **kwargs
+    cc: Optional[str | List[str]] = None,
+    bcc: Optional[str | List[str]] = None,
+    attachments: Optional[List[str]] = None
 ) -> bool:
     """
     Convenience function to send email quickly
@@ -301,6 +296,15 @@ def send_email(
             body="Welcome to Job Match!"
         )
     """
+    dto = EmailMessageDTO(
+        to=to,
+        subject=subject,
+        body=body,
+        html_body=html_body,
+        cc=cc,
+        bcc=bcc,
+        attachments=attachments
+    )
     helper = EmailHelper()
-    return helper.send_email(to=to, subject=subject, body=body, html_body=html_body, **kwargs)
+    return helper.send_email(dto)
 
