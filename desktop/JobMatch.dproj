@@ -161,7 +161,6 @@
         </DCCReference>
         <DCCReference Include="data_modules\unMainDataModule.pas">
             <Form>dtmMainDataModule</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <BuildConfiguration Include="Base">

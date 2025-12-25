@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons,
-  System.JSON, REST.Client, REST.Types, System.UITypes;
+  System.JSON, REST.Client, REST.Types, System.UITypes, REST.HttpClient;
 
 type
   TfrmLogin = class(TForm)
@@ -52,31 +52,37 @@ begin
     dtmMainDataModule.restRequest.body.ClearBody;
     dtmMainDataModule.restRequest.Params.Clear;
     dtmMainDataModule.restRequest.AddBody(JsonBody.ToString, ctAPPLICATION_JSON);
-    dtmMainDataModule.restRequest.Execute;
 
-    JsonResponse := TJSONObject.ParseJSONValue(dtmMainDataModule.restResponse.Content)
-      as TJSONObject;
     try
-      Screen.Cursor := crDefault;
+      dtmMainDataModule.restRequest.Execute;
 
-      if (dtmMainDataModule.restResponse.StatusCode >= 200) and
-         (dtmMainDataModule.restResponse.StatusCode < 300) then
+      JsonResponse := TJSONObject.ParseJSONValue(dtmMainDataModule.restResponse.Content)
+        as TJSONObject;
+      try
+        Screen.Cursor := crDefault;
+
+        if (dtmMainDataModule.restResponse.StatusCode >= 200) and
+           (dtmMainDataModule.restResponse.StatusCode < 300) then
+        begin
+          CustomConfig.HashAuthentication := JsonResponse.GetValue('hash').Value;
+          SaveConfiguration;
+          ModalResult := mrOk;
+        end
+        else
+          MessageDlg(JsonResponse.GetValue('error').Value, mtError, [mbOK], 0);
+      finally
+        JsonResponse.Free;
+      end;
+    except
+      on E: EHTTPProtocolException do
       begin
-        CustomConfig.HashAuthentication := JsonResponse.GetValue('hash').Value;
-        SaveConfiguration;
-        ModalResult := mrOk;
+        raise;
       end
-      else
-        MessageDlg(JsonResponse.GetValue('error').Value, mtError, [mbOK], 0);
-    finally
-      JsonResponse.Free;
     end;
   finally
     JsonBody.Free;
   end;
 end;
-
-uses unMainForm;
 
 procedure TfrmLogin.FormActivate(Sender: TObject);
 begin

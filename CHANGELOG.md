@@ -23,6 +23,7 @@
 - Created LoginUserDTO and ResponseUserLoginDTO for authentication flow.
 - Implemented user login validation endpoint `PUT /v1/users/validate-login/{hash}` to validate user login using validation hash.
 - Implemented login screen in the desktop application
+- Implemented user authentication by hash endpoint `POST /v1/users/hash-login/{hash}` for authentication using hash.
 
 ### Deprecated
 
@@ -37,4 +38,6 @@
 - Updated Swagger documentation to include the new user registration endpoint `POST /v1/users`.
 - Updated Swagger documentation to include the new user login endpoint `POST /v1/users/login` with JWT authentication.
 - Updated Swagger documentation to include the new user login validation endpoint `PUT /v1/users/validate-login/{hash}`.
+- Updated Swagger documentation to include the new user authentication by hash endpoint `POST /v1/users/hash-login/{hash}`.
 - Standardized Swagger schema names to match DTO classes (CreateUserDTO, LoginUserDTO, ResponseUserDTO, ResponseUserLoginDTO).
+- Created TROUBLESHOOTING.md file with solutions to main compilation and deployment problems.

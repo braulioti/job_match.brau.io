@@ -30,6 +30,7 @@ New project updates can be followed through X:
     - [Installation](#installation)
     - [Execution](#execution)
     - [Health Check Endpoint](#health-check-endpoint)
+- [Troubleshooting](#troubleshooting)
 - [Running the Docker Container](#running-the-docker-container)
     - [Using Docker directly](#using-docker-directly)
     - [Using Docker Compose](#using-docker-compose)
@@ -53,6 +54,7 @@ job_match.brau.io/
 ├── README.md                  # Main documentation
 ├── CHANGELOG.md               # Change history
 ├── CONTRIBUTING.md            # Contribution guide
+├── TROUBLESHOOTING.md         # Troubleshooting guide
 └── LICENSE                    # Project license
 ```
 
@@ -142,6 +144,10 @@ python app.py
 - **Available languages**:  
   - The list of available OpenAPI documentation languages and their files is maintained in the folder `api/swagger`.  
   - Each language corresponds to a YAML file following the pattern `<locale>.yaml` / `<locale>.yml` (for example: `en_US.yaml`, `pt_BR.yaml`).
+
+## Troubleshooting
+
+[Click here](TROUBLESHOOTING.md) for solutions to the main compilation and deployment problems you may encounter while working with this project.
 
 ## Running the Docker Container
 

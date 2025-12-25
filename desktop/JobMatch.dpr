@@ -7,6 +7,9 @@ uses
   System.SysUtils,
   System.Classes,
   Vcl.Controls,
+  System.JSON,
+  REST.Types,
+  REST.HttpClient,
   unMainForm in 'forms\unMainForm.pas' {frmMainForm},
   ChildWin in 'ChildWin.pas' {MDIChild},
   Constants in 'libs\Constants.pas',
@@ -26,6 +29,32 @@ uses
 const
   TOTAL_FORMS = 6;
   TOTAL_ACTIONS = 1;
+
+function TryAuthenticate: Boolean;
+var
+  HashAuthentication: string;
+  JsonValue: TJSONValue;
+  URI: string;
+begin
+  Result := False;
+  HashAuthentication := Trim(CustomConfig.HashAuthentication);
+
+  if HashAuthentication = '' then
+    Exit;
+
+  URI := Format('%s/v1/users/hash-login/%s',
+    [CustomConfig.APIServer, HashAuthentication]);
+
+  dtmMainDataModule.restClient.BaseURL := URI;
+  dtmMainDataModule.restRequest.Method := rmPOST;
+  dtmMainDataModule.restRequest.Body.ClearBody;
+  dtmMainDataModule.restRequest.Params.Clear;
+
+  dtmMainDataModule.restRequest.Execute;
+
+  Result := dtmMainDataModule.restResponse.StatusCode = 200;
+end;
+
 
 procedure CreateFormAndUpdateProgress(InstanceClass: TComponentClass; var Reference);
 begin
@@ -55,11 +84,19 @@ begin
   Application.CreateForm(TfrmMainForm, frmMainForm);
   frmSplash.pgbProgress.Position := frmSplash.pgbProgress.Position + 1;
 
+  // Update Labels
+  Version := Format('%s %s', [frmMainForm.Languages.VersionTitle, CustomConfig.Version]);
+  Author := Format('%s %s', [frmMainForm.Languages.Author, AUTHOR_NAME]);
+  ChangeAndRefreshLabel(frmSplash.lblProgressStatus, frmMainForm.Languages.LoadingApplicationScreens);
+  ChangeAndRefreshLabel(frmSplash.lblVersion, Version);
+  ChangeAndRefreshLabel(frmSplash.lblAboutDetails, frmMainForm.Languages.AboutDetails);
+  ChangeAndRefreshLabel(frmSplash.lblAuthor, Author);
+
   Application.CreateForm(TdtmMainDataModule, dtmMainDataModule);
   frmSplash.pgbProgress.Position := frmSplash.pgbProgress.Position + 1;
 
   // Action 1 - Login
-  if Trim(CustomConfig.HashAuthentication) = EmptyStr then
+  if not(TryAuthenticate) then
   begin
     FormLogin := TfrmLogin.Create(Application);
     frmSplash.Visible := False;
@@ -72,15 +109,6 @@ begin
     Application.Terminate
   else
   begin
-    // Update Labels
-    Version := Format('%s %s', [frmMainForm.Languages.VersionTitle, CustomConfig.Version]);
-    Author := Format('%s %s', [frmMainForm.Languages.Author, AUTHOR_NAME]);
-    ChangeAndRefreshLabel(frmSplash.lblProgressStatus, frmMainForm.Languages.LoadingApplicationScreens);
-    ChangeAndRefreshLabel(frmSplash.lblVersion, Version);
-    ChangeAndRefreshLabel(frmSplash.lblAboutDetails, frmMainForm.Languages.AboutDetails);
-    ChangeAndRefreshLabel(frmSplash.lblAuthor, Author);
-    Sleep(1000);
-
     CreateFormAndUpdateProgress(TfrmAbout, frmAbout);
     CreateFormAndUpdateProgress(TfrmNewProject, frmNewProject);
     CreateFormAndUpdateProgress(TfrmOpenProject, frmOpenProject);
