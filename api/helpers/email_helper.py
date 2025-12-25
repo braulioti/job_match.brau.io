@@ -10,6 +10,8 @@ from email import encoders
 from typing import List, Optional
 import os
 
+from api.dtos.email_message_dto import EmailMessageDTO
+
 
 class EmailHelper:
     """
@@ -91,6 +93,79 @@ class EmailHelper:
         if not self.sender_password:
             raise ValueError("Email password is required. Set SMTP_PASSWORD in config.py or environment variable.")
     
+    def _build_message(
+        self,
+        dto: EmailMessageDTO
+    ) -> tuple[MIMEMultipart, List[str]]:
+        """
+        Build email message with recipients, body, and attachments.
+        
+        Args:
+            dto: EmailMessageDTO containing all email message data
+            
+        Returns:
+            tuple: (MIMEMultipart message, List of recipient email addresses)
+        """
+        # Create message
+        if dto.html_body:
+            message = MIMEMultipart("alternative")
+        else:
+            message = MIMEMultipart()
+        
+        message["From"] = self.sender_email
+        message["Subject"] = dto.subject
+        
+        # Handle recipients
+        to = dto.to
+        if isinstance(to, str):
+            to = [to]
+        message["To"] = ", ".join(to)
+        
+        cc = dto.cc
+        if cc:
+            if isinstance(cc, str):
+                cc = [cc]
+            message["Cc"] = ", ".join(cc)
+        
+        # Add all recipients for SMTP
+        recipients = to.copy()
+        if cc:
+            recipients.extend(cc)
+        bcc = dto.bcc
+        if bcc:
+            if isinstance(bcc, str):
+                bcc = [bcc]
+            recipients.extend(bcc)
+        
+        # Add body
+        if dto.html_body:
+            # Create plain text and HTML parts
+            text_part = MIMEText(dto.body, "plain")
+            html_part = MIMEText(dto.html_body, "html")
+            message.attach(text_part)
+            message.attach(html_part)
+        else:
+            text_part = MIMEText(dto.body, "plain")
+            message.attach(text_part)
+        
+        # Add attachments
+        if dto.attachments:
+            for file_path in dto.attachments:
+                if os.path.exists(file_path):
+                    with open(file_path, "rb") as attachment:
+                        part = MIMEBase("application", "octet-stream")
+                        part.set_payload(attachment.read())
+                    
+                    encoders.encode_base64(part)
+                    filename = os.path.basename(file_path)
+                    part.add_header(
+                        "Content-Disposition",
+                        f"attachment; filename= {filename}",
+                    )
+                    message.attach(part)
+        
+        return message, recipients
+    
     def send_email(
         self,
         to: str | List[str],
@@ -120,60 +195,16 @@ class EmailHelper:
             Exception: If email sending fails
         """
         try:
-            # Create message
-            if html_body:
-                message = MIMEMultipart("alternative")
-            else:
-                message = MIMEMultipart()
-            
-            message["From"] = self.sender_email
-            message["Subject"] = subject
-            
-            # Handle recipients
-            if isinstance(to, str):
-                to = [to]
-            message["To"] = ", ".join(to)
-            
-            if cc:
-                if isinstance(cc, str):
-                    cc = [cc]
-                message["Cc"] = ", ".join(cc)
-            
-            # Add all recipients for SMTP
-            recipients = to.copy()
-            if cc:
-                recipients.extend(cc)
-            if bcc:
-                if isinstance(bcc, str):
-                    bcc = [bcc]
-                recipients.extend(bcc)
-            
-            # Add body
-            if html_body:
-                # Create plain text and HTML parts
-                text_part = MIMEText(body, "plain")
-                html_part = MIMEText(html_body, "html")
-                message.attach(text_part)
-                message.attach(html_part)
-            else:
-                text_part = MIMEText(body, "plain")
-                message.attach(text_part)
-            
-            # Add attachments
-            if attachments:
-                for file_path in attachments:
-                    if os.path.exists(file_path):
-                        with open(file_path, "rb") as attachment:
-                            part = MIMEBase("application", "octet-stream")
-                            part.set_payload(attachment.read())
-                        
-                        encoders.encode_base64(part)
-                        filename = os.path.basename(file_path)
-                        part.add_header(
-                            "Content-Disposition",
-                            f"attachment; filename= {filename}",
-                        )
-                        message.attach(part)
+            dto = EmailMessageDTO(
+                to=to,
+                subject=subject,
+                body=body,
+                html_body=html_body,
+                cc=cc,
+                bcc=bcc,
+                attachments=attachments
+            )
+            message, recipients = self._build_message(dto)
             
             # Create secure connection and send email
             # Port 465 uses SSL directly, port 587 uses STARTTLS
