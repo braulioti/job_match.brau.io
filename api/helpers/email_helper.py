@@ -93,6 +93,92 @@ class EmailHelper:
         if not self.sender_password:
             raise ValueError("Email password is required. Set SMTP_PASSWORD in config.py or environment variable.")
     
+    def _create_message_base(self, dto: EmailMessageDTO) -> MIMEMultipart:
+        """
+        Create the base email message with headers.
+        
+        Args:
+            dto: EmailMessageDTO containing email data
+            
+        Returns:
+            MIMEMultipart message with From and Subject headers
+        """
+        if dto.html_body:
+            message = MIMEMultipart("alternative")
+        else:
+            message = MIMEMultipart()
+        
+        message["From"] = self.sender_email
+        message["Subject"] = dto.subject
+        
+        return message
+    
+    def _normalize_recipient_list(self, recipient: str | List[str] | None) -> List[str]:
+        """
+        Normalize recipient to a list format.
+        
+        Args:
+            recipient: Single email string, list of emails, or None
+            
+        Returns:
+            List of email addresses (empty list if None)
+        """
+        if not recipient:
+            return []
+        
+        if isinstance(recipient, str):
+            return [recipient]
+        
+        return recipient
+    
+    def _process_recipients(
+        self,
+        message: MIMEMultipart,
+        dto: EmailMessageDTO
+    ) -> List[str]:
+        """
+        Process and set all recipients (To, Cc, Bcc) in the message.
+        
+        Args:
+            message: MIMEMultipart message to set recipients
+            dto: EmailMessageDTO containing recipient data
+            
+        Returns:
+            Complete list of all recipients for SMTP sending
+        """
+        to = self._normalize_recipient_list(dto.to)
+        cc = self._normalize_recipient_list(dto.cc)
+        bcc = self._normalize_recipient_list(dto.bcc)
+        
+        message["To"] = ", ".join(to)
+        if cc:
+            message["Cc"] = ", ".join(cc)
+        
+        # Combine all recipients for SMTP
+        recipients = to.copy()
+        recipients.extend(cc)
+        recipients.extend(bcc)
+        
+        return recipients
+    
+    def _add_message_body(self, message: MIMEMultipart, dto: EmailMessageDTO) -> None:
+        """
+        Add message body (plain text and/or HTML) to the message.
+        
+        Args:
+            message: MIMEMultipart message to add body to
+            dto: EmailMessageDTO containing body data
+        """
+        if dto.html_body:
+            # Create plain text and HTML parts
+            text_part = MIMEText(dto.body, "plain")
+            html_part = MIMEText(dto.html_body, "html")
+            message.attach(text_part)
+            message.attach(html_part)
+        else:
+            text_part = MIMEText(dto.body, "plain")
+            message.attach(text_part)
+    
     def _build_message(
         self,
         dto: EmailMessageDTO
@@ -106,49 +192,9 @@ class EmailHelper:
         Returns:
             tuple: (MIMEMultipart message, List of recipient email addresses)
         """
-        # Create message
-        if dto.html_body:
-            message = MIMEMultipart("alternative")
-        else:
-            message = MIMEMultipart()
-        
-        message["From"] = self.sender_email
-        message["Subject"] = dto.subject
-        
-        # Handle recipients
-        to = dto.to
-        if isinstance(to, str):
-            to = [to]
-        message["To"] = ", ".join(to)
-        
-        cc = dto.cc
-        if cc:
-            if isinstance(cc, str):
-                cc = [cc]
-            message["Cc"] = ", ".join(cc)
-        
-        # Add all recipients for SMTP
-        recipients = to.copy()
-        if cc:
-            recipients.extend(cc)
-        bcc = dto.bcc
-        if bcc:
-            if isinstance(bcc, str):
-                bcc = [bcc]
-            recipients.extend(bcc)
-        
-        # Add body
-        if dto.html_body:
-            # Create plain text and HTML parts
-            text_part = MIMEText(dto.body, "plain")
-            html_part = MIMEText(dto.html_body, "html")
-            message.attach(text_part)
-            message.attach(html_part)
-        else:
-            text_part = MIMEText(dto.body, "plain")
-            message.attach(text_part)
-        
-        # Add attachments
+        message = self._create_message_base(dto)
+        recipients = self._process_recipients(message, dto)
+        self._add_message_body(message, dto)
         self._add_attachments(message, dto.attachments)
         
         return message, recipients
