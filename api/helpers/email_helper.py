@@ -44,13 +44,47 @@ class EmailHelper:
             smtp_server: SMTP server address (defaults to SMTP_HOST from config or env)
             smtp_port: SMTP server port (defaults to SMTP_PORT from config or env)
         """
-        from api.config import SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD
+        self.sender_email = self._resolve_sender_email(sender_email)
+        self.sender_password = self._resolve_sender_password(sender_password)
+        self.SMTP_SERVER = self._resolve_smtp_server(smtp_server)
+        self.SMTP_PORT = self._resolve_smtp_port(smtp_port)
         
-        self.sender_email = sender_email or SMTP_USER or os.getenv('SMTP_USER')
-        self.sender_password = sender_password or SMTP_PASSWORD or os.getenv('SMTP_PASSWORD')
-        self.SMTP_SERVER = smtp_server or SMTP_HOST or os.getenv('SMTP_HOST') or 'smtp.gmail.com'
-        self.SMTP_PORT = smtp_port or SMTP_PORT or int(os.getenv('SMTP_PORT', '587'))
-        
+        self._validate_required_fields()
+    
+    @staticmethod
+    def _resolve_sender_email(provided_email: Optional[str]) -> Optional[str]:
+        """Resolve sender email from provided value, config, or environment."""
+        if provided_email:
+            return provided_email
+        from api.config import SMTP_USER
+        return SMTP_USER or os.getenv('SMTP_USER')
+    
+    @staticmethod
+    def _resolve_sender_password(provided_password: Optional[str]) -> Optional[str]:
+        """Resolve sender password from provided value, config, or environment."""
+        if provided_password:
+            return provided_password
+        from api.config import SMTP_PASSWORD
+        return SMTP_PASSWORD or os.getenv('SMTP_PASSWORD')
+    
+    @staticmethod
+    def _resolve_smtp_server(provided_server: Optional[str]) -> str:
+        """Resolve SMTP server from provided value, config, environment, or default."""
+        if provided_server:
+            return provided_server
+        from api.config import SMTP_HOST
+        return SMTP_HOST or os.getenv('SMTP_HOST') or 'smtp.gmail.com'
+    
+    @staticmethod
+    def _resolve_smtp_port(provided_port: Optional[int]) -> int:
+        """Resolve SMTP port from provided value, config, environment, or default."""
+        if provided_port:
+            return provided_port
+        from api.config import SMTP_PORT
+        return SMTP_PORT or int(os.getenv('SMTP_PORT', '587'))
+    
+    def _validate_required_fields(self) -> None:
+        """Validate that required fields are set."""
         if not self.sender_email:
             raise ValueError("Email sender address is required. Set SMTP_USER in config.py or environment variable.")
         
