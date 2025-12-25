@@ -9,7 +9,7 @@ info:
     **Versão 1.0.0**
     - Implementado `POST /v1/users` para criação de usuários com autenticação
     - Implementado `POST /v1/users/login` para login de usuários usando autenticação JWT (JSON Web Token)
-    - Implementado `PUT /v1/users/validate-login/{hash}` para validação de login de usuários
+    - Implementado `GET /v1/users/validate-login/{hash_value}` para validação de login de usuários (retorna HTML)
     - Implementado `POST /v1/users/hash-login/{hash}` para autenticação de usuários usando hash
 
   version: 1.0.0
@@ -122,15 +122,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /v1/users/validate-login/{hash}:
-    put:
+  /v1/users/validate-login/{hash_value}:
+    get:
       tags:
         - Usuários
       summary: Validação de login de usuário
-      description: Valida o login de um usuário usando o hash de validação, atualizando o status de validação para true.
+      description: Valida o login de um usuário usando o hash de validação, atualizando o status de validação para true e retornando uma página HTML de confirmação.
       operationId: validateLoginUser
       parameters:
-        - name: hash
+        - name: hash_value
           in: path
           required: true
           description: Hash de validação (UUID v4) do usuário
@@ -140,11 +140,12 @@ paths:
             example: "33f78d0d-5404-4820-9b57-cdcd90010aa7"
       responses:
         '200':
-          description: Login validado com sucesso
+          description: Login validado com sucesso - retorna página HTML de confirmação
           content:
-            application/json:
+            text/html:
               schema:
-                $ref: '#/components/schemas/ResponseUserDTO'
+                type: string
+                example: "<!DOCTYPE html><html>...</html>"
         '404':
           description: Hash de validação inválido ou não encontrado
           content:

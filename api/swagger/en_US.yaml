@@ -9,8 +9,8 @@ info:
     **Version 1.0.0**
     - Implemented `POST /v1/users` for user creation with authentication-ready data
     - Implemented `POST /v1/users/login` for user login using JWT (JSON Web Token) authentication
-    - Implemented `PUT /v1/users/validate-login/{hash}` for user login validation
-    - Implemented `POST /v1/users/hash-login/{hash}` for user authentication using hash
+    - Implemented `GET /v1/users/validate-login/{hash_value}` for user login validation (returns HTML)
+    - Implemented `POST /v1/users/hash-login/{hash_value}` for user authentication using hash
 
   version: 1.0.0
   contact:
@@ -122,15 +122,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /v1/users/validate-login/{hash}:
-    put:
+  /v1/users/validate-login/{hash_value}:
+    get:
       tags:
         - Users
       summary: User login validation
-      description: Validates a user login using the validation hash, updating the validation status to true.
+      description: Validates a user login using the validation hash, updating the validation status to true and returning an HTML confirmation page.
       operationId: validateLoginUser
       parameters:
-        - name: hash
+        - name: hash_value
           in: path
           required: true
           description: User validation hash (UUID v4)
@@ -140,11 +140,12 @@ paths:
             example: "33f78d0d-5404-4820-9b57-cdcd90010aa7"
       responses:
         '200':
-          description: Login validated successfully
+          description: Login validated successfully - returns HTML confirmation page
           content:
-            application/json:
+            text/html:
               schema:
-                $ref: '#/components/schemas/ResponseUserDTO'
+                type: string
+                example: "<!DOCTYPE html><html>...</html>"
         '404':
           description: Invalid or not found validation hash
           content:

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validate Your Email - JobMatch</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+    <div style="background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 30px;">
+        <h2 style="color: #2c3e50; margin-top: 0;">JobMatch - Email Validation</h2>
+        
+        <p style="font-size: 16px; margin: 20px 0;">
+            We noticed that you are trying to register on JobMatch. Click here to validate your email.
+        </p>
+        
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="{{ validation_url }}" 
+               style="display: inline-block; background-color: #28a745; color: #ffffff; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 16px;">
+                Validate Email
+            </a>
+        </div>
+        
+        <p style="font-size: 14px; color: #666; margin-top: 30px;">
+            If the button doesn't work, copy and paste the following link into your browser:
+        </p>
+        <p style="font-size: 12px; color: #999; word-break: break-all;">
+            {{ validation_url }}
+        </p>
+        
+        <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 30px 0;">
+        
+        <p style="font-size: 12px; color: #999; margin: 0;">
+            If you didn't request this validation, please ignore this email.
+        </p>
+    </div>
+</body>
+</html>
+
