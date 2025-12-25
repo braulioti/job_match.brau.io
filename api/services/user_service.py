@@ -26,6 +26,48 @@ class UserService:
         """Internal helper to obtain a new database session."""
         return SessionLocal()
 
+    @staticmethod
+    def _update_last_login(user: User, db: Session) -> None:
+        """
+        Update user's last_login timestamp.
+
+        :param user: User instance to update
+        :param db: Database session
+        """
+        user.last_login = datetime.utcnow()
+        db.commit()
+        db.refresh(user)
+
+    @staticmethod
+    def _generate_jwt_payload(user: User) -> dict:
+        """
+        Generate JWT payload for user.
+
+        :param user: User instance
+        :return: JWT payload dictionary
+        """
+        return {
+            "user_id": user.id,
+            "email": user.email,
+            "exp": datetime.utcnow() + timedelta(hours=JWT_EXPIRATION_HOURS),
+            "iat": datetime.utcnow()
+        }
+
+    @staticmethod
+    def _generate_jwt_token(user: User) -> str:
+        """
+        Generate JWT token for user.
+
+        :param user: User instance
+        :return: JWT token string
+        """
+        payload = UserService._generate_jwt_payload(user)
+        token = jwt.encode(payload, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
+        # Ensure token is a string (PyJWT returns string in version 2.x)
+        if isinstance(token, bytes):
+            token = token.decode('utf-8')
+        return token
+
     def create_user(self, dto: CreateUserDTO) -> User:
         """
         Create a new user with a hashed password.
@@ -77,21 +119,10 @@ class UserService:
                 raise ValueError("Invalid email or password.")
 
             # Update last_login
-            user.last_login = datetime.utcnow()
-            db.commit()
-            db.refresh(user)
+            self._update_last_login(user, db)
 
             # Generate JWT token
-            payload = {
-                "user_id": user.id,
-                "email": user.email,
-                "exp": datetime.utcnow() + timedelta(hours=JWT_EXPIRATION_HOURS),
-                "iat": datetime.utcnow()
-            }
-            token = jwt.encode(payload, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
-            # Ensure token is a string (PyJWT returns string in version 2.x)
-            if isinstance(token, bytes):
-                token = token.decode('utf-8')
+            token = self._generate_jwt_token(user)
 
             # Return response DTO
             return ResponseUserLoginDTO(token=token, user=user)
@@ -146,21 +177,10 @@ class UserService:
                 raise ValueError("Invalid hash.")
 
             # Update last_login
-            user.last_login = datetime.utcnow()
-            db.commit()
-            db.refresh(user)
+            self._update_last_login(user, db)
 
             # Generate JWT token
-            payload = {
-                "user_id": user.id,
-                "email": user.email,
-                "exp": datetime.utcnow() + timedelta(hours=JWT_EXPIRATION_HOURS),
-                "iat": datetime.utcnow()
-            }
-            token = jwt.encode(payload, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
-            # Ensure token is a string (PyJWT returns string in version 2.x)
-            if isinstance(token, bytes):
-                token = token.decode('utf-8')
+            token = self._generate_jwt_token(user)
 
             # Return response DTO
             return ResponseUserLoginDTO(token=token, user=user)
