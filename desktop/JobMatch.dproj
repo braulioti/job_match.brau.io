@@ -163,6 +163,10 @@
             <Form>dtmMainDataModule</Form>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
+        <DCCReference Include="forms\unValidateAccount.pas">
+            <Form>frmValidateAccount</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

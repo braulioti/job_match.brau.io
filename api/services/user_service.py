@@ -238,6 +238,28 @@ class UserService:
         finally:
             db.close()
 
+    def resend_email(self, hash_value: str) -> None:
+        """
+        Resend validation email to user.
+
+        - Finds user by hash (authentication hash)
+        - Sends validation email using _send_validation_email
+
+        :param hash_value: Hash string (UUID v4) for authentication
+        :raises ValueError: if hash is invalid or user not found
+        """
+        db: Session = self._get_session()
+        try:
+            # Find user by hash
+            user = db.query(User).filter_by(hash=hash_value).first()
+            if not user:
+                raise ValueError("Invalid hash.")
+
+            # Send validation email
+            self._send_validation_email(user)
+        finally:
+            db.close()
+
 
 # Instância única do serviço para ser usada nos controllers
 user_service = UserService()

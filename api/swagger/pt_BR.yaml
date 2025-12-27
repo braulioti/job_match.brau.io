@@ -11,6 +11,7 @@ info:
     - Implementado `POST /v1/users/login` para login de usuários usando autenticação JWT (JSON Web Token)
     - Implementado `GET /v1/users/validate-login/{hash_value}` para validação de login de usuários (retorna HTML)
     - Implementado `POST /v1/users/hash-login/{hash}` para autenticação de usuários usando hash
+    - Implementado `POST /v1/users/resend-validate-email/{hash_value}` para reenvio de email de validação
 
   version: 1.0.0
   contact:
@@ -182,6 +183,47 @@ paths:
               schema:
                 $ref: '#/components/schemas/ResponseUserLoginDTO'
         '401':
+          description: Hash inválido ou não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/users/resend-validate-email/{hash_value}:
+    post:
+      tags:
+        - Usuários
+      summary: Reenvio de email de validação
+      description: Reenvia o email de validação para um usuário usando o hash de autenticação.
+      operationId: resendValidateEmail
+      parameters:
+        - name: hash_value
+          in: path
+          required: true
+          description: Hash de autenticação (UUID v4) do usuário
+          schema:
+            type: string
+            format: uuid
+            example: "4239cb5c-b06a-4841-a685-7714901cc920"
+      responses:
+        '200':
+          description: Email de validação enviado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Validation email sent successfully"
+                required:
+                  - message
+        '404':
           description: Hash inválido ou não encontrado
           content:
             application/json:

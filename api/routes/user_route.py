@@ -48,3 +48,13 @@ def hash_login_route(hash_value: str):
     """
     return user_controller.hash_login(hash_value)
 
+@user_bp.route("/resend-validate-email/<hash_value>", methods=["POST"])
+def resend_validate_email_route(hash_value: str):
+    """
+    Route for resending validation email.
+
+    Receives hash (authentication hash) as path parameter.
+    Delegates the logic to the user controller.
+    """
+    return user_controller.resend_validate_email(hash_value)
+

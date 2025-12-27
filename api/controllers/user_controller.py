@@ -108,3 +108,24 @@ class UserController:
                 500,
             )
 
+    def resend_validate_email(self, hash_value: str):
+        """
+        Handle resend validation email request.
+
+        Receives hash (authentication hash) as path parameter.
+
+        Returns 200 success response.
+        """
+        try:
+            self.service.resend_email(hash_value)
+            return jsonify({"message": "Validation email sent successfully"}), 200
+        except ValueError as e:
+            return jsonify({"error": str(e)}), 404
+        except Exception as e:
+            return (
+                jsonify(
+                    {"error": "Internal server error", "message": str(e)}
+                ),
+                500,
+            )
+
