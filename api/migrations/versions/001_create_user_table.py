@@ -1,8 +1,8 @@
 """Create user table
 
-Revision ID: 002_create_user_table
-Revises: 001_create_file_table
-Create Date: 2024-01-02 00:00:00.000000
+Revision ID: 001_create_user_table
+Revises:
+Create Date: 2015-12-22 00:00:00.000000
 
 """
 from alembic import op
