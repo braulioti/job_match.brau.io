@@ -17,19 +17,6 @@ object frmMainForm: TfrmMainForm
   OnClose = FormClose
   OnCreate = FormCreate
   TextHeight = 13
-  object stbStatusBar: TStatusBar
-    Left = 0
-    Top = 376
-    Width = 475
-    Height = 19
-    Margins.Left = 2
-    Margins.Top = 2
-    Margins.Right = 2
-    Margins.Bottom = 2
-    AutoHint = True
-    Panels = <>
-    SimplePanel = True
-  end
   object tobToolBar: TToolBar
     Left = 0
     Top = 0
@@ -42,7 +29,7 @@ object frmMainForm: TfrmMainForm
     ParentColor = False
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 1
+    TabOrder = 0
     Transparent = False
     object tobNewProject: TToolButton
       Left = 0
@@ -76,6 +63,43 @@ object frmMainForm: TfrmMainForm
       ImageIndex = 1
       ImageName = 'cog'
       OnClick = OpenConfigurationDialog
+    end
+  end
+  object pnlStatus: TPanel
+    Left = 0
+    Top = 360
+    Width = 475
+    Height = 35
+    Align = alBottom
+    BevelOuter = bvLowered
+    TabOrder = 1
+    object pnlValidateAccount: TPanel
+      Left = 1
+      Top = 1
+      Width = 248
+      Height = 33
+      Cursor = crHandPoint
+      Align = alLeft
+      Alignment = taLeftJustify
+      BevelOuter = bvLowered
+      TabOrder = 0
+      OnClick = pnlValidateAccountClick
+      object lblValidateAccount: TLabel
+        Left = 8
+        Top = 8
+        Width = 214
+        Height = 17
+        Caption = 'Click here to validate your account'
+        Color = clRed
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clRed
+        Font.Height = -13
+        Font.Name = 'Default'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        OnClick = pnlValidateAccountClick
+      end
     end
   end
   object mnuMenu: TMainMenu
@@ -319,5 +343,11 @@ object frmMainForm: TfrmMainForm
     ImageCollection = imlImageCollection
     Left = 72
     Top = 40
+  end
+  object tmrValidateAccount: TTimer
+    Interval = 300
+    OnTimer = tmrValidateAccountTimer
+    Left = 8
+    Top = 72
   end
 end

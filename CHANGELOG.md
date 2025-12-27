@@ -24,6 +24,7 @@
 - Implemented user login validation endpoint `GET /v1/users/validate-login/{hash_value}` to validate user login using validation hash, returning an HTML confirmation page.
 - Implemented automatic validation email sending after user registration with validation link.
 - Implemented login screen in the desktop application
+- Implemented account validation in the desktop application
 - Implemented user authentication by hash endpoint `POST /v1/users/hash-login/{hash_value}` for authentication using hash.
 
 ### Deprecated

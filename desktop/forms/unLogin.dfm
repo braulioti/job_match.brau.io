@@ -43,7 +43,7 @@ object frmLogin: TfrmLogin
     Caption = 'OK'
     Default = True
     NumGlyphs = 2
-    TabOrder = 1
+    TabOrder = 2
     OnClick = btnOKClick
   end
   object btnCancel: TBitBtn
@@ -53,7 +53,7 @@ object frmLogin: TfrmLogin
     Height = 33
     Kind = bkCancel
     NumGlyphs = 2
-    TabOrder = 2
+    TabOrder = 3
   end
   object edtPassword: TEdit
     Left = 22
@@ -61,6 +61,6 @@ object frmLogin: TfrmLogin
     Width = 257
     Height = 23
     PasswordChar = '*'
-    TabOrder = 3
+    TabOrder = 1
   end
 end

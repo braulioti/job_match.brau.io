@@ -22,28 +22,25 @@ uses
   unNewProject in 'forms\unNewProject.pas' {frmNewProject},
   unOpenProject in 'forms\unOpenProject.pas' {frmOpenProject},
   unLogin in 'forms\unLogin.pas' {frmLogin},
-  unMainDataModule in 'data_modules\unMainDataModule.pas' {dtmMainDataModule: TDataModule};
+  unMainDataModule in 'data_modules\unMainDataModule.pas' {dtmMainDataModule: TDataModule},
+  unValidateAccount in 'forms\unValidateAccount.pas' {frmValidateAccount};
 
 {$R *.RES}
 
 const
-  TOTAL_FORMS = 6;
-  TOTAL_ACTIONS = 1;
+  TOTAL_FORMS = 7;
+  TOTAL_ACTIONS = 2;
 
-function TryAuthenticate: Boolean;
+function TryAuthenticate(Hash: string): Boolean;
 var
-  HashAuthentication: string;
-  JsonValue: TJSONValue;
   URI: string;
 begin
   Result := False;
-  HashAuthentication := Trim(CustomConfig.HashAuthentication);
 
-  if HashAuthentication = '' then
+  if Hash = EmptyStr then
     Exit;
 
-  URI := Format('%s/v1/users/hash-login/%s',
-    [CustomConfig.APIServer, HashAuthentication]);
+  URI := Format('%s/v1/users/hash-login/%s', [CustomConfig.APIServer, Hash]);
 
   dtmMainDataModule.restClient.BaseURL := URI;
   dtmMainDataModule.restRequest.Method := rmPOST;
@@ -60,7 +57,7 @@ procedure CreateFormAndUpdateProgress(InstanceClass: TComponentClass; var Refere
 begin
   Application.CreateForm(InstanceClass, Reference);
   frmSplash.pgbProgress.Position := frmSplash.pgbProgress.Position + 1;
-  Sleep(250);
+  Sleep(200);
 end;
 
 var
@@ -68,6 +65,7 @@ var
   Author: string;
   FormLogin: TfrmLogin;
   LoginStatus: Integer;
+  HashAuthentication: string;
 
 begin
   LoginStatus := -1;
@@ -96,7 +94,8 @@ begin
   frmSplash.pgbProgress.Position := frmSplash.pgbProgress.Position + 1;
 
   // Action 1 - Login
-  if not(TryAuthenticate) then
+  HashAuthentication := Trim(CustomConfig.HashAuthentication);
+  if not(TryAuthenticate(HashAuthentication)) then
   begin
     FormLogin := TfrmLogin.Create(Application);
     frmSplash.Visible := False;
@@ -113,6 +112,11 @@ begin
     CreateFormAndUpdateProgress(TfrmNewProject, frmNewProject);
     CreateFormAndUpdateProgress(TfrmOpenProject, frmOpenProject);
     CreateFormAndUpdateProgress(TfrmConfiguration, frmConfiguration);
+    CreateFormAndUpdateProgress(TfrmValidateAccount, frmValidateAccount);
+
+    frmMainForm.ValidatedMail := dtmMainDataModule.ValidatedMail(HashAuthentication);
+    frmMainForm.UpdateStatusValidateAccount(frmMainForm.ValidatedMail);
+    frmSplash.pgbProgress.Position := frmSplash.pgbProgress.Position + 1;
 
     frmSplash.Close;
     frmSplash.Free;
