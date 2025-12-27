@@ -1,0 +1,361 @@
+openapi: 3.0.3
+info:
+  title: Job Match API
+  description: |
+    ## API para avaliação de currículos e vagas de emprego usando Inteligência Artificial
+
+    ### Changelog
+
+    **Versão 1.0.0**
+    - Implementado `POST /v1/users` para criação de usuários com autenticação
+    - Implementado `POST /v1/users/login` para login de usuários usando autenticação JWT (JSON Web Token)
+    - Implementado `GET /v1/users/validate-login/{hash_value}` para validação de login de usuários (retorna HTML)
+    - Implementado `POST /v1/users/hash-login/{hash}` para autenticação de usuários usando hash
+    - Implementado `POST /v1/users/resend-validate-email/{hash_value}` para reenvio de email de validação
+
+  version: 1.0.0
+  contact:
+    name: Bráulio Figueiredo
+    email: jobmatch@brau.io
+    url: https://brau.io
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:5000
+    description: Servidor de desenvolvimento local
+  - url: https://api.jobmatch.brau.io
+    description: Servidor de produção
+
+tags:
+  - name: Health
+    description: Endpoints de verificação de saúde da API
+  - name: Usuários
+    description: Endpoints para gerenciamento de usuários
+
+paths:
+  /health:
+    get:
+      tags:
+        - Health
+      summary: Verificação de saúde da API
+      description: Retorna o status de saúde da API
+      operationId: healthCheck
+      responses:
+        '200':
+          description: API está funcionando corretamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: healthy
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/users:
+    post:
+      tags:
+        - Usuários
+      summary: Criação de usuário
+      description: Cria um novo usuário com e-mail e senha válidos.
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserDTO'
+      responses:
+        '201':
+          description: Usuário criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUserDTO'
+        '400':
+          description: Dados inválidos ou e-mail já cadastrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/users/login:
+    post:
+      tags:
+        - Usuários
+      summary: Autenticação de usuário
+      description: Autentica um usuário com e-mail e senha, retornando um token JWT.
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUserDTO'
+      responses:
+        '200':
+          description: Autenticação realizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUserLoginDTO'
+        '401':
+          description: Credenciais inválidas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/users/validate-login/{hash_value}:
+    get:
+      tags:
+        - Usuários
+      summary: Validação de login de usuário
+      description: Valida o login de um usuário usando o hash de validação, atualizando o status de validação para true e retornando uma página HTML de confirmação.
+      operationId: validateLoginUser
+      parameters:
+        - name: hash_value
+          in: path
+          required: true
+          description: Hash de validação (UUID v4) do usuário
+          schema:
+            type: string
+            format: uuid
+            example: "33f78d0d-5404-4820-9b57-cdcd90010aa7"
+      responses:
+        '200':
+          description: Login validado com sucesso - retorna página HTML de confirmação
+          content:
+            text/html:
+              schema:
+                type: string
+                example: "<!DOCTYPE html><html>...</html>"
+        '404':
+          description: Hash de validação inválido ou não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/users/hash-login/{hash_value}:
+    post:
+      tags:
+        - Usuários
+      summary: Autenticação de usuário por hash
+      description: Autentica um usuário usando o hash de autenticação, retornando um token JWT.
+      operationId: hashLoginUser
+      parameters:
+        - name: hash_value
+          in: path
+          required: true
+          description: Hash de autenticação (UUID v4) do usuário
+          schema:
+            type: string
+            format: uuid
+            example: "4239cb5c-b06a-4841-a685-7714901cc920"
+      responses:
+        '200':
+          description: Autenticação realizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUserLoginDTO'
+        '401':
+          description: Hash inválido ou não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/users/resend-validate-email/{hash_value}:
+    post:
+      tags:
+        - Usuários
+      summary: Reenvio de email de validação
+      description: Reenvia o email de validação para um usuário usando o hash de autenticação.
+      operationId: resendValidateEmail
+      parameters:
+        - name: hash_value
+          in: path
+          required: true
+          description: Hash de autenticação (UUID v4) do usuário
+          schema:
+            type: string
+            format: uuid
+            example: "4239cb5c-b06a-4841-a685-7714901cc920"
+      responses:
+        '200':
+          description: Email de validação enviado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Validation email sent successfully"
+                required:
+                  - message
+        '404':
+          description: Hash inválido ou não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Mensagem de erro
+        message:
+          type: string
+          description: Detalhes do erro
+      required:
+        - error
+
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - healthy
+            - unhealthy
+          description: Status da API
+    CreateUserDTO:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: Endereço de e-mail do usuário
+        password:
+          type: string
+          format: password
+          description: Senha do usuário (mínimo 8 caracteres, com letra, número e caractere especial)
+          pattern: '^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>_\-+=;''/\\\[\]])[A-Za-z\d!@#$%^&*(),.?":{}|<>_\-+=;''/\\\[\]]{8,}$'
+      required:
+        - email
+        - password
+    LoginUserDTO:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: Endereço de e-mail do usuário
+        password:
+          type: string
+          format: password
+          description: Senha do usuário (mínimo 8 caracteres, com letra, número e caractere especial)
+          pattern: '^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>_\-+=;''/\\\[\]])[A-Za-z\d!@#$%^&*(),.?":{}|<>_\-+=;''/\\\[\]]{8,}$'
+      required:
+        - email
+        - password
+    ResponseUserLoginDTO:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Token JWT para autenticação
+          example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6InVzdWFyaW9AZXhhbXBsZS5jb20iLCJleHAiOjE3MzQ4NzIwMDAsImlhdCI6MTczNDc4NTYwMH0.example_signature"
+        hash:
+          type: string
+          description: Hash UUID v4 associado ao usuário para autenticação
+          example: "4239cb5c-b06a-4841-a685-7714901cc920"
+        validated:
+          type: boolean
+          description: Status de validação do usuário
+          example: false
+      required:
+        - token
+        - hash
+        - validated
+    ResponseUserDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Identificador único do usuário
+        email:
+          type: string
+          format: email
+          description: Endereço de e-mail do usuário
+        hash:
+          type: string
+          description: Hash UUID v4 associado ao usuário para autenticação
+        hashValidated:
+          type: string
+          description: Hash UUID v4 associado ao usuário para validação
+        createdAt:
+          type: string
+          format: date-time
+          description: Data de criação do usuário
+          example: "2025-12-22T03:50:08.902104"
+      required:
+        - id
+        - email
+        - hash
+        - hashValidated
+        - createdAt
+
+  responses:
+    NotFound:
+      description: Recurso não encontrado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    
+    BadRequest:
+      description: Requisição inválida
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    
+    InternalServerError:
+      description: Erro interno do servidor
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+

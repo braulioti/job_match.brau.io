@@ -12,7 +12,6 @@ uses Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Forms,
 
 type
   TfrmMainForm = class(TForm)
-    stbStatusBar: TStatusBar;
     mnuMenu: TMainMenu;
     tobToolBar: TToolBar;
     tobNewProject: TToolButton;
@@ -22,12 +21,18 @@ type
     tobSeparator1: TToolButton;
     tobConfiguration: TToolButton;
     tobOpenProject: TToolButton;
+    pnlStatus: TPanel;
+    pnlValidateAccount: TPanel;
+    lblValidateAccount: TLabel;
+    tmrValidateAccount: TTimer;
     procedure FileNew1Execute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure OpenNewProject(Sender: TObject);
     procedure OpenConfigurationDialog(Sender: TObject);
     procedure OpenOpenProject(Sender: TObject);
+    procedure tmrValidateAccountTimer(Sender: TObject);
+    procedure pnlValidateAccountClick(Sender: TObject);
   private
     { Private declarations }
     procedure CreateMDIChild(const Name: string);
@@ -35,9 +40,11 @@ type
   public
     Languages: TLabelLanguages;
     ActionClients: TActionClients;
+    ValidatedMail: boolean;
     procedure UpdateLanguage;
     procedure CloseMainForm(Sender: TObject);
     procedure OpenAboutDialog(Sender: TObject);
+    procedure UpdateStatusValidateAccount(Valid: boolean);
     { Public declarations }
   end;
 
@@ -50,7 +57,7 @@ implementation
 
 uses
   CHILDWIN, Constants, unConfiguration, Utils, Config, unAbout, unNewProject,
-  unOpenProject;
+  unOpenProject, unValidateAccount;
 
 var
   MenuProject: TMenuItem;
@@ -166,6 +173,19 @@ begin
   frmOpenProject.ShowModal;
 end;
 
+procedure TfrmMainForm.pnlValidateAccountClick(Sender: TObject);
+begin
+  if not ValidatedMail then
+  begin  
+    frmValidateAccount.ShowModal;
+  end;
+end;
+
+procedure TfrmMainForm.tmrValidateAccountTimer(Sender: TObject);
+begin
+  lblValidateAccount.Visible := not lblValidateAccount.Visible;
+end;
+
 procedure TfrmMainForm.UpdateLanguage;
 begin
   MenuProject.Caption := Languages.Project;
@@ -183,6 +203,25 @@ begin
 
   frmConfiguration.Caption := Languages.Configurations;
   frmMainForm.Caption := Format('%s - %s', [APPLICATION_NAME, CustomConfig.Version]);
+end;
+
+procedure TfrmMainForm.UpdateStatusValidateAccount(Valid: boolean);
+begin
+  if Valid then
+  begin
+    lblValidateAccount.Caption := Languages.ValidateAccountValid;
+    lblValidateAccount.Font.Color := clGreen;
+    pnlValidateAccount.Cursor := crDefault;
+    tmrValidateAccount.Enabled := False;
+    lblValidateAccount.Visible := True;
+  end
+  else 
+  begin    
+    lblValidateAccount.Caption := Languages.ClickToValidate;
+    lblValidateAccount.Font.Color := clRed;
+    pnlValidateAccount.Cursor := crHandPoint;
+    tmrValidateAccount.Enabled := True;  
+  end;
 end;
 
 end.

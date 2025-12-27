@@ -32,6 +32,20 @@ type
     ProjectDetails: string;
     OpenProject: string;
     SelectProject: string;
+    Login: string;
+    Password: string;
+    Email: string;
+    ValidateAccountValid: string;
+    ClickToValidate: string;
+    Send: string;
+    Validation: string;
+    ValidationMessage: string;
+    Validate: string;
+    SendEmail: string;
+    ValidateAccountSuccessful: string;
+    ValidateAccountError: string;
+    SendEmailError: string;
+    SendEmailSuccess: string;
   end;
 
   TAvailableLanguages = record
@@ -128,6 +142,19 @@ begin
     Aux.ProjectDetails := LoadStringLine(LanguageFile, 'PROJECT_DETAILS');
     Aux.OpenProject := LoadStringLine(LanguageFile, 'OPEN_PROJECT');
     Aux.SelectProject := LoadStringLine(LanguageFile, 'SELECT_PROJECT');
+    Aux.Login := LoadStringLine(LanguageFile, 'LOGIN');
+    Aux.Password := LoadStringLine(LanguageFile, 'PASSWORD');
+    Aux.Email := LoadStringLine(LanguageFile, 'EMAIL');
+    Aux.ValidateAccountValid := LoadStringLine(LanguageFile, 'VALIDATE_ACCOUNT_VALID');
+    Aux.ClickToValidate := LoadStringLine(LanguageFile, 'CLICK_TO_VALIDATE');
+    Aux.Validation := LoadStringLine(LanguageFile, 'VALIDATION');
+    Aux.ValidationMessage := LoadStringLine(LanguageFile, 'VALIDATION_MESSAGE');
+    Aux.Validate := LoadStringLine(LanguageFile, 'VALIDATE');
+    Aux.SendEmail := LoadStringLine(LanguageFile, 'SEND_EMAIL');
+    Aux.ValidateAccountSuccessful := LoadStringLine(LanguageFile, 'VALIDATE_ACCOUNT_SUCCESSFUL');
+    Aux.ValidateAccountError := LoadStringLine(LanguageFile, 'VALIDATE_ACCOUNT_ERROR');
+    Aux.SendEmailError := LoadStringLine(LanguageFile, 'SEND_EMAIL_ERROR');
+    Aux.SendEmailSuccess := LoadStringLine(LanguageFile, 'SEND_EMAIL_SUCCESS');
 
     BuildLanguageLabels := Aux;
   finally

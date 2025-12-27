@@ -30,6 +30,7 @@ New project updates can be followed through X:
     - [Installation](#installation)
     - [Execution](#execution)
     - [Health Check Endpoint](#health-check-endpoint)
+- [Troubleshooting](#troubleshooting)
 - [Running the Docker Container](#running-the-docker-container)
     - [Using Docker directly](#using-docker-directly)
     - [Using Docker Compose](#using-docker-compose)
@@ -53,6 +54,7 @@ job_match.brau.io/
 ├── README.md                  # Main documentation
 ├── CHANGELOG.md               # Change history
 ├── CONTRIBUTING.md            # Contribution guide
+├── TROUBLESHOOTING.md         # Troubleshooting guide
 └── LICENSE                    # Project license
 ```
 
@@ -74,6 +76,8 @@ job_match.brau.io/
 To add a translation file to the project, add a line with the language code in `languages/available_languages` and create a language file with the `.txt` extension in the `languages/` folder. 
 
 The translated content should have a constant before the "=" and the translation after it. Example: `EXIT=Exit`. To facilitate understanding of the file, the values are being organized in alphabetical order.
+
+Whenever you add a new language file in the `languages/` folder, it is recommended to also create the corresponding Swagger documentation file for that language inside `api/swagger`, following the same locale naming pattern (for example: `en_US.yaml`, `pt_BR.yaml`). 
 
 ## Backend API Project
 
@@ -122,6 +126,28 @@ python app.py
 ### Health Check Endpoint
 - **GET** `/health`
   - Returns the API status
+
+### Swagger Documentation
+
+- **Default access**:  
+  - Open your browser and access: `http://localhost:5000/docs`  
+  - By default, the documentation is rendered in **English** (`en-US`).
+
+- **Language selection (optional query parameter)**:  
+  - You can choose the documentation language using the optional `language` query parameter:  
+    - `http://localhost:5000/docs?language=en-US`  
+    - `http://localhost:5000/docs?language=pt-BR`  
+  - The same parameter is also supported on the raw OpenAPI endpoint:  
+    - `http://localhost:5000/openapi?language=en-US`  
+    - `http://localhost:5000/openapi?language=pt-BR`
+
+- **Available languages**:  
+  - The list of available OpenAPI documentation languages and their files is maintained in the folder `api/swagger`.  
+  - Each language corresponds to a YAML file following the pattern `<locale>.yaml` / `<locale>.yml` (for example: `en_US.yaml`, `pt_BR.yaml`).
+
+## Troubleshooting
+
+[Click here](TROUBLESHOOTING.md) for solutions to the main compilation and deployment problems you may encounter while working with this project.
 
 ## Running the Docker Container
 
