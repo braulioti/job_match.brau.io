@@ -40,8 +40,13 @@
 #iOSDevice64/
 #Linux64/
 
-# Delphi compiler-generated binaries (safe to delete)
+# Ignore all .dll files except sqlite3.dll in desktop/dll/
 *.dll
+!desktop/
+!desktop/dll/
+!desktop/dll/sqlite3.dll
+
+# Delphi compiler-generated binaries (safe to delete)
 *.bpl
 *.bpi
 *.dcp

@@ -26,6 +26,8 @@
 - Implemented login screen in the desktop application
 - Implemented account validation in the desktop application
 - Implemented user authentication by hash endpoint `POST /v1/users/hash-login/{hash_value}` for authentication using hash.
+- Created File model with relationship to User model and static methods for file lookup (by ID, hash, checksum, user_id).
+- Added SQLite database to manage local project information.
 
 ### Deprecated
 
