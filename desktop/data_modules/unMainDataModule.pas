@@ -4,13 +4,21 @@ interface
 
 uses
   System.SysUtils, System.Classes, REST.Types, REST.Client,
-  Data.Bind.Components, Data.Bind.ObjectScope, System.JSON;
+  Data.Bind.Components, Data.Bind.ObjectScope, System.JSON, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf,
+  FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys,
+  FireDAC.Phys.SQLite, FireDAC.Phys.SQLiteDef, FireDAC.Stan.ExprFuncs,
+  FireDAC.VCLUI.Wait, FireDAC.Phys.SQLiteWrapper.Stat, Data.DB,
+  FireDAC.Comp.Client;
 
 type
   TdtmMainDataModule = class(TDataModule)
     restClient: TRESTClient;
     restRequest: TRESTRequest;
     restResponse: TRESTResponse;
+    fdcDatabase: TFDConnection;
+    fdcDriverLink: TFDPhysSQLiteDriverLink;
+    procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -26,9 +34,16 @@ implementation
 
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 
-uses Config;
+uses Config, Utils;
 
 {$R *.dfm}
+
+procedure TdtmMainDataModule.DataModuleCreate(Sender: TObject);
+begin
+  fdcDriverLink.VendorLib := Format('%s/dll/sqlite3.dll', [Utils.ExePath]);
+  fdcDatabase.Params.Database := Format('%s/database.match', [Utils.ExePath]);
+  fdcDatabase.Connected := true;
+end;
 
 function TdtmMainDataModule.ResendValidateMail(Hash: string): boolean;
 var

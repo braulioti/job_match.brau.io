@@ -1,4 +1,5 @@
 object dtmMainDataModule: TdtmMainDataModule
+  OnCreate = DataModuleCreate
   Height = 480
   Width = 640
   object restClient: TRESTClient
@@ -18,5 +19,16 @@ object dtmMainDataModule: TdtmMainDataModule
   object restResponse: TRESTResponse
     Left = 136
     Top = 24
+  end
+  object fdcDatabase: TFDConnection
+    Params.Strings = (
+      'DriverID=SQLite')
+    LoginPrompt = False
+    Left = 48
+    Top = 128
+  end
+  object fdcDriverLink: TFDPhysSQLiteDriverLink
+    Left = 144
+    Top = 128
   end
 end
