@@ -9,7 +9,7 @@ uses
   FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys,
   FireDAC.Phys.SQLite, FireDAC.Phys.SQLiteDef, FireDAC.Stan.ExprFuncs,
   FireDAC.VCLUI.Wait, FireDAC.Phys.SQLiteWrapper.Stat, Data.DB,
-  FireDAC.Comp.Client;
+  FireDAC.Comp.Client, FireDAC.DApt, FireDAC.Stan.Param;
 
 type
   TdtmMainDataModule = class(TDataModule)
@@ -25,6 +25,7 @@ type
     { Public declarations }
     function ValidatedMail(Hash: string): boolean;
     function ResendValidateMail(Hash: string): boolean;
+    procedure ProcessMigrations;
   end;
 
 var
@@ -34,7 +35,7 @@ implementation
 
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 
-uses Config, Utils;
+uses Config, Utils, Constants;
 
 {$R *.dfm}
 
@@ -43,6 +44,74 @@ begin
   fdcDriverLink.VendorLib := Format('%s/dll/sqlite3.dll', [Utils.ExePath]);
   fdcDatabase.Params.Database := Format('%s/database.match', [Utils.ExePath]);
   fdcDatabase.Connected := true;
+end;
+
+procedure TdtmMainDataModule.ProcessMigrations;
+var
+  Query: TFDQuery;
+  Version: Integer;
+begin
+  Version := 0;
+
+  Query := TFDQuery.Create(nil);
+  try
+    Query.Connection := fdcDatabase;
+    Query.SQL.Clear;
+    Query.SQL.Add('CREATE TABLE IF NOT EXISTS parameter (  ');
+    Query.SQL.Add('   id INTEGER PRIMARY KEY AUTOINCREMENT,');
+    Query.SQL.Add('   param_name VARCHAR(100) NOT NULL,    ');
+    Query.SQL.Add('   param_value VARCHAR(255) NOT NULL);  ');
+    Query.ExecSQL;
+    Query.Close;
+
+    Query.SQL.Clear;
+    Query.Params.Clear;
+    Query.SQL.Add('SELECT param_value FROM parameter WHERE param_name = :param_name;');
+    Query.Params.ParamByName('param_name').Value := PARAM_VERSION_NAME;
+    Query.Open;
+
+    if Query.RecordCount > 0 then
+    begin
+      Version := StrToInt(Query.FieldByName('param_value').AsString);      
+      Query.Close;
+    end
+    else 
+    begin                                                                  
+      Query.Close;
+      
+      Query.SQL.Clear;    
+      Query.Params.Clear;
+      Query.SQL.Add('INSERT INTO parameter (param_name, param_value) VALUES (:param_name, :param_value);');
+      Query.Params.ParamByName('param_name').Value := PARAM_VERSION_NAME;
+      Query.Params.ParamByName('param_value').Value := IntToStr(Version);
+      Query.ExecSQL;
+      Query.Close;
+    end;
+
+    // Create Project Type Table
+    if Version <= 0 then
+    begin
+      Version := Version + 1;
+
+      Query.SQL.Clear;
+      Query.SQL.Add('CREATE TABLE IF NOT EXISTS project_type ( ');
+      Query.SQL.Add('   id INTEGER PRIMARY KEY AUTOINCREMENT,  ');
+      Query.SQL.Add('   code VARCHAR(100) NOT NULL);           ');
+      Query.ExecSQL;
+      Query.Close; 
+      
+      Query.SQL.Clear;    
+      Query.Params.Clear;
+      Query.SQL.Add('UPDATE parameter SET param_value = :param_value WHERE param_name = :param_name;');
+      Query.Params.ParamByName('param_name').Value := PARAM_VERSION_NAME;
+      Query.Params.ParamByName('param_value').Value := IntToStr(Version);
+      Query.ExecSQL;
+      Query.Close;
+    end;
+    
+  finally
+    Query.Free;
+  end;
 end;
 
 function TdtmMainDataModule.ResendValidateMail(Hash: string): boolean;

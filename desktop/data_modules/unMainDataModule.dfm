@@ -1,7 +1,7 @@
 object dtmMainDataModule: TdtmMainDataModule
   OnCreate = DataModuleCreate
-  Height = 480
-  Width = 640
+  Height = 240
+  Width = 393
   object restClient: TRESTClient
     Params = <>
     SynchronizedEvents = False

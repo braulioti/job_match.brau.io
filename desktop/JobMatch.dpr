@@ -29,7 +29,7 @@ uses
 
 const
   TOTAL_FORMS = 7;
-  TOTAL_ACTIONS = 2;
+  TOTAL_ACTIONS = 3;
 
 function TryAuthenticate(Hash: string): Boolean;
 var
@@ -108,6 +108,10 @@ begin
     Application.Terminate
   else
   begin
+    // Action 2 - Execute Database Update
+    dtmMainDataModule.ProcessMigrations;
+    frmSplash.pgbProgress.Position := frmSplash.pgbProgress.Position + 1;
+
     CreateFormAndUpdateProgress(TfrmAbout, frmAbout);
     CreateFormAndUpdateProgress(TfrmNewProject, frmNewProject);
     CreateFormAndUpdateProgress(TfrmOpenProject, frmOpenProject);
@@ -115,6 +119,8 @@ begin
     CreateFormAndUpdateProgress(TfrmValidateAccount, frmValidateAccount);
 
     frmMainForm.ValidatedMail := dtmMainDataModule.ValidatedMail(HashAuthentication);
+
+    // Action 3 - Update Validate Account
     frmMainForm.UpdateStatusValidateAccount(frmMainForm.ValidatedMail);
     frmSplash.pgbProgress.Position := frmSplash.pgbProgress.Position + 1;
 
