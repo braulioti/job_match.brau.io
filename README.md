@@ -26,6 +26,8 @@ New project updates can be followed through X:
 - [Project Structure](#project-structure)
 - [Technologies](#technologies)
 - [Languages](#languages)
+- [Frontend Desktop Project](#frontend-desktop-project)
+    - [Database Versioning](#database-versioning)
 - [Backend API Project](#backend-api-project)
     - [Installation](#installation)
     - [Execution](#execution)
@@ -77,7 +79,13 @@ To add a translation file to the project, add a line with the language code in `
 
 The translated content should have a constant before the "=" and the translation after it. Example: `EXIT=Exit`. To facilitate understanding of the file, the values are being organized in alphabetical order.
 
-Whenever you add a new language file in the `languages/` folder, it is recommended to also create the corresponding Swagger documentation file for that language inside `api/swagger`, following the same locale naming pattern (for example: `en_US.yaml`, `pt_BR.yaml`). 
+Whenever you add a new language file in the `languages/` folder, it is recommended to also create the corresponding Swagger documentation file for that language inside `api/swagger`, following the same locale naming pattern (for example: `en_US.yaml`, `pt_BR.yaml`).
+
+## Frontend Desktop Project
+
+### Database Versioning
+
+The database versioning is done using the parameters table with the VERSION parameter as a reference to control the versions of database scripts. The database file is `database.match`, which is automatically generated and can be opened using SQLite.
 
 ## Backend API Project
 
