@@ -29,6 +29,7 @@
 - Created File model with relationship to User model and static methods for file lookup (by ID, hash, checksum, user_id).
 - Added SQLite database to manage local project information.
 - Added database versioning in the desktop application.
+- Created the database table structure for the desktop project.
 
 ### Deprecated
 

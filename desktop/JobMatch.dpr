@@ -57,7 +57,6 @@ procedure CreateFormAndUpdateProgress(InstanceClass: TComponentClass; var Refere
 begin
   Application.CreateForm(InstanceClass, Reference);
   frmSplash.pgbProgress.Position := frmSplash.pgbProgress.Position + 1;
-  Sleep(200);
 end;
 
 var

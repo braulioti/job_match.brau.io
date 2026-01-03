@@ -27,6 +27,7 @@ New project updates can be followed through X:
 - [Technologies](#technologies)
 - [Languages](#languages)
 - [Frontend Desktop Project](#frontend-desktop-project)
+    - [Desktop Database Diagram](#desktop-database-diagram)
     - [Database Versioning](#database-versioning)
 - [Backend API Project](#backend-api-project)
     - [Installation](#installation)
@@ -82,6 +83,10 @@ The translated content should have a constant before the "=" and the translation
 Whenever you add a new language file in the `languages/` folder, it is recommended to also create the corresponding Swagger documentation file for that language inside `api/swagger`, following the same locale naming pattern (for example: `en_US.yaml`, `pt_BR.yaml`).
 
 ## Frontend Desktop Project
+
+### Desktop Database Diagram
+
+![Desktop Database Diagram](docs/images/diagrams/desktop_database_diagram.png)
 
 ### Database Versioning
 
