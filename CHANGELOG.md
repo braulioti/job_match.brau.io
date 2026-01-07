@@ -30,6 +30,7 @@
 - Added SQLite database to manage local project information.
 - Added database versioning in the desktop application.
 - Created the database table structure for the desktop project.
+- Created the project registration form.
 
 ### Deprecated
 
