@@ -134,9 +134,6 @@
         <DCCReference Include="forms\unMainForm.pas">
             <Form>frmMainForm</Form>
         </DCCReference>
-        <DCCReference Include="ChildWin.pas">
-            <Form>MDIChild</Form>
-        </DCCReference>
         <DCCReference Include="libs\Constants.pas"/>
         <DCCReference Include="libs\Language.pas"/>
         <DCCReference Include="libs\Utils.pas"/>
@@ -165,6 +162,10 @@
         </DCCReference>
         <DCCReference Include="forms\unValidateAccount.pas">
             <Form>frmValidateAccount</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="forms\unProject.pas">
+            <Form>frmProject</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Base">

@@ -11,7 +11,6 @@ uses
   REST.Types,
   REST.HttpClient,
   unMainForm in 'forms\unMainForm.pas' {frmMainForm},
-  ChildWin in 'ChildWin.pas' {MDIChild},
   Constants in 'libs\Constants.pas',
   Language in 'libs\Language.pas',
   Utils in 'libs\Utils.pas',
@@ -23,7 +22,8 @@ uses
   unOpenProject in 'forms\unOpenProject.pas' {frmOpenProject},
   unLogin in 'forms\unLogin.pas' {frmLogin},
   unMainDataModule in 'data_modules\unMainDataModule.pas' {dtmMainDataModule: TDataModule},
-  unValidateAccount in 'forms\unValidateAccount.pas' {frmValidateAccount};
+  unValidateAccount in 'forms\unValidateAccount.pas' {frmValidateAccount},
+  unProject in 'forms\unProject.pas' {frmProject};
 
 {$R *.RES}
 

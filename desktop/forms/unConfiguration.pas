@@ -43,6 +43,7 @@ begin
         CustomConfig.Language := AvailableLanguages.Items[I].Code;
         SaveConfiguration;
         frmMainForm.Languages := BuildLanguageLabels(CustomConfig.Language);
+        frmMainForm.LanguageCode := CustomConfig.Language;
         frmMainForm.UpdateLanguage;
         UpdateLanguage;
         Break;

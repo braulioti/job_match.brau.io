@@ -4,7 +4,7 @@ object frmNewProject: TfrmNewProject
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'New Project'
-  ClientHeight = 282
+  ClientHeight = 349
   ClientWidth = 372
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -14,6 +14,7 @@ object frmNewProject: TfrmNewProject
   Font.Style = []
   Position = poScreenCenter
   OnActivate = FormActivate
+  OnCreate = FormCreate
   TextHeight = 15
   object lblProjectName: TLabel
     Left = 25
@@ -28,6 +29,13 @@ object frmNewProject: TfrmNewProject
     Width = 75
     Height = 15
     Caption = 'Project Details'
+  end
+  object lblProjectType: TLabel
+    Left = 25
+    Top = 218
+    Width = 65
+    Height = 15
+    Caption = 'Project Type'
   end
   object edtProjectName: TEdit
     Left = 25
@@ -45,20 +53,28 @@ object frmNewProject: TfrmNewProject
   end
   object btnOK: TBitBtn
     Left = 86
-    Top = 224
+    Top = 288
     Width = 89
     Height = 33
     Kind = bkOK
     NumGlyphs = 2
-    TabOrder = 2
+    TabOrder = 3
+    OnClick = btnOKClick
   end
   object btnCancel: TBitBtn
     Left = 198
-    Top = 224
+    Top = 288
     Width = 89
     Height = 33
     Kind = bkCancel
     NumGlyphs = 2
-    TabOrder = 3
+    TabOrder = 4
+  end
+  object cboProjectType: TComboBox
+    Left = 25
+    Top = 239
+    Width = 321
+    Height = 23
+    TabOrder = 2
   end
 end

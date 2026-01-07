@@ -25,7 +25,6 @@ type
     pnlValidateAccount: TPanel;
     lblValidateAccount: TLabel;
     tmrValidateAccount: TTimer;
-    procedure FileNew1Execute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure OpenNewProject(Sender: TObject);
@@ -35,10 +34,10 @@ type
     procedure pnlValidateAccountClick(Sender: TObject);
   private
     { Private declarations }
-    procedure CreateMDIChild(const Name: string);
     procedure ConfigurateMenu;
   public
     Languages: TLabelLanguages;
+    LanguageCode: string;
     ActionClients: TActionClients;
     ValidatedMail: boolean;
     procedure UpdateLanguage;
@@ -56,7 +55,7 @@ implementation
 {$R *.dfm}
 
 uses
-  CHILDWIN, Constants, unConfiguration, Utils, Config, unAbout, unNewProject,
+  Constants, unConfiguration, Utils, Config, unAbout, unNewProject,
   unOpenProject, unValidateAccount;
 
 var
@@ -120,21 +119,6 @@ begin
   mnuMenu.Items.Add(MenuHelp);
 end;
 
-procedure TfrmMainForm.CreateMDIChild(const Name: string);
-var
-  Child: TMDIChild;
-begin
-  { create a new MDI child window }
-  Child := TMDIChild.Create(Application);
-  Child.Caption := Name;
-  if FileExists(Name) then Child.Memo1.Lines.LoadFromFile(Name);
-end;
-
-procedure TfrmMainForm.FileNew1Execute(Sender: TObject);
-begin
-  CreateMDIChild('NONAME' + IntToStr(MDIChildCount + 1));
-end;
-
 procedure TfrmMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   if MessageDlg(Languages.MessageExit, mtConfirmation, mbYesNo, 0) = mrYes then
@@ -147,6 +131,7 @@ procedure TfrmMainForm.FormCreate(Sender: TObject);
 begin
   LoadConfiguration;
   Languages := BuildLanguageLabels(CustomConfig.Language);
+  LanguageCode := CustomConfig.Language;
   LoadAvailableLanguages;
   ConfigurateMenu;
   UpdateLanguage;
