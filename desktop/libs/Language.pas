@@ -46,6 +46,9 @@ type
     ValidateAccountError: string;
     SendEmailError: string;
     SendEmailSuccess: string;
+    ProjectType: string;
+    ErrorCreatingProject: string;
+    ErrorOpenProject: string;
   end;
 
   TAvailableLanguages = record
@@ -54,6 +57,7 @@ type
   end;
 
 function BuildLanguageLabels(LanguageCode: string): TLabelLanguages;
+function GetLanguageLabel(LanguageCode: string; Code: string): string;
 procedure LoadAvailableLanguages;
 
 var
@@ -155,6 +159,9 @@ begin
     Aux.ValidateAccountError := LoadStringLine(LanguageFile, 'VALIDATE_ACCOUNT_ERROR');
     Aux.SendEmailError := LoadStringLine(LanguageFile, 'SEND_EMAIL_ERROR');
     Aux.SendEmailSuccess := LoadStringLine(LanguageFile, 'SEND_EMAIL_SUCCESS');
+    Aux.ProjectType := LoadStringLine(LanguageFile, 'PROJECT_TYPE');
+    Aux.ErrorCreatingProject := LoadStringLine(LanguageFile, 'NEW_PROJECT_ERROR');
+    Aux.ErrorOpenProject := LoadStringLine(LanguageFile, 'OPEN_PROJECT_ERROR');
 
     BuildLanguageLabels := Aux;
   finally
@@ -162,4 +169,21 @@ begin
   end;
 end;
 
+
+function GetLanguageLabel(LanguageCode: string; Code: string): string;
+var
+  LanguageFile: TStringList;
+  FileName: string;
+begin
+  LanguageFile := TStringList.Create;
+  try
+    FileName := Format('%s%s/%s.%s',
+      [ExePath, LANGUAGE_FOLDER, LanguageCode, LANGUAGE_FILE_EXT]);
+    LanguageFile.LoadFromFile(FileName, TEncoding.UTF8);
+
+    GetLanguageLabel := LoadStringLine(LanguageFile, Code);
+  finally
+    LanguageFile.Free;
+  end;
+end;
 end.

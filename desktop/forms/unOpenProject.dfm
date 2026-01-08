@@ -4,7 +4,7 @@ object frmOpenProject: TfrmOpenProject
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Open Project'
-  ClientHeight = 286
+  ClientHeight = 339
   ClientWidth = 367
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -14,6 +14,7 @@ object frmOpenProject: TfrmOpenProject
   Font.Style = []
   Position = poScreenCenter
   OnActivate = FormActivate
+  OnClose = FormClose
   TextHeight = 15
   object lblSelectProject: TLabel
     Left = 25
@@ -29,6 +30,13 @@ object frmOpenProject: TfrmOpenProject
     Height = 15
     Caption = 'Project Details'
   end
+  object lblProjectType: TLabel
+    Left = 25
+    Top = 218
+    Width = 65
+    Height = 15
+    Caption = 'Project Type'
+  end
   object mmoProjectDetails: TMemo
     Left = 25
     Top = 111
@@ -36,31 +44,43 @@ object frmOpenProject: TfrmOpenProject
     Height = 89
     Color = clBtnFace
     ReadOnly = True
-    TabOrder = 0
+    TabOrder = 1
   end
   object btnOK: TBitBtn
     Left = 86
-    Top = 224
+    Top = 288
     Width = 89
     Height = 33
     Kind = bkOK
     NumGlyphs = 2
-    TabOrder = 1
+    TabOrder = 3
+    OnClick = btnOKClick
   end
   object btnCancel: TBitBtn
     Left = 198
-    Top = 224
+    Top = 288
     Width = 89
     Height = 33
     Kind = bkCancel
     NumGlyphs = 2
-    TabOrder = 2
+    TabOrder = 4
   end
   object cboSelectProject: TComboBox
     Left = 25
     Top = 45
     Width = 321
     Height = 23
-    TabOrder = 3
+    Sorted = True
+    TabOrder = 0
+    OnChange = cboSelectProjectChange
+  end
+  object edtProjectType: TEdit
+    Left = 25
+    Top = 239
+    Width = 321
+    Height = 23
+    Color = clBtnFace
+    ReadOnly = True
+    TabOrder = 2
   end
 end

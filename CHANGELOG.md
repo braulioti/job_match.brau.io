@@ -28,6 +28,10 @@
 - Implemented user authentication by hash endpoint `POST /v1/users/hash-login/{hash_value}` for authentication using hash.
 - Created File model with relationship to User model and static methods for file lookup (by ID, hash, checksum, user_id).
 - Added SQLite database to manage local project information.
+- Added database versioning in the desktop application.
+- Created the database table structure for the desktop project.
+- Created the project registration form.
+- Created the open project form.
 
 ### Deprecated
 

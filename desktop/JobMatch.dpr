@@ -11,7 +11,6 @@ uses
   REST.Types,
   REST.HttpClient,
   unMainForm in 'forms\unMainForm.pas' {frmMainForm},
-  ChildWin in 'ChildWin.pas' {MDIChild},
   Constants in 'libs\Constants.pas',
   Language in 'libs\Language.pas',
   Utils in 'libs\Utils.pas',
@@ -23,13 +22,15 @@ uses
   unOpenProject in 'forms\unOpenProject.pas' {frmOpenProject},
   unLogin in 'forms\unLogin.pas' {frmLogin},
   unMainDataModule in 'data_modules\unMainDataModule.pas' {dtmMainDataModule: TDataModule},
-  unValidateAccount in 'forms\unValidateAccount.pas' {frmValidateAccount};
+  unValidateAccount in 'forms\unValidateAccount.pas' {frmValidateAccount},
+  unProject in 'forms\unProject.pas' {frmProject},
+  unProjectClass in 'classes\unProjectClass.pas';
 
 {$R *.RES}
 
 const
   TOTAL_FORMS = 7;
-  TOTAL_ACTIONS = 2;
+  TOTAL_ACTIONS = 3;
 
 function TryAuthenticate(Hash: string): Boolean;
 var
@@ -57,7 +58,6 @@ procedure CreateFormAndUpdateProgress(InstanceClass: TComponentClass; var Refere
 begin
   Application.CreateForm(InstanceClass, Reference);
   frmSplash.pgbProgress.Position := frmSplash.pgbProgress.Position + 1;
-  Sleep(200);
 end;
 
 var
@@ -108,6 +108,10 @@ begin
     Application.Terminate
   else
   begin
+    // Action 2 - Execute Database Update
+    dtmMainDataModule.ProcessMigrations;
+    frmSplash.pgbProgress.Position := frmSplash.pgbProgress.Position + 1;
+
     CreateFormAndUpdateProgress(TfrmAbout, frmAbout);
     CreateFormAndUpdateProgress(TfrmNewProject, frmNewProject);
     CreateFormAndUpdateProgress(TfrmOpenProject, frmOpenProject);
@@ -115,6 +119,8 @@ begin
     CreateFormAndUpdateProgress(TfrmValidateAccount, frmValidateAccount);
 
     frmMainForm.ValidatedMail := dtmMainDataModule.ValidatedMail(HashAuthentication);
+
+    // Action 3 - Update Validate Account
     frmMainForm.UpdateStatusValidateAccount(frmMainForm.ValidatedMail);
     frmSplash.pgbProgress.Position := frmSplash.pgbProgress.Position + 1;
 
