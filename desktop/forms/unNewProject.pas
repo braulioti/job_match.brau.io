@@ -6,15 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Vcl.StdCtrls, Vcl.Buttons, System.UITypes, FireDAC.Comp.Client,
-  System.Generics.Collections, FireDAC.Stan.Param;
-
-type
-  TProjectType = class
-  public
-    Id: Integer;
-    Code: string;
-    Translation: string;
-  end;
+  System.Generics.Collections, FireDAC.Stan.Param, unProjectClass;
 
 type
   TfrmNewProject = class(TForm)

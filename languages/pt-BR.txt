@@ -19,6 +19,7 @@ NEW_PROJECT=Novo Projeto
 NEW_PROJECT_ERROR=Erro ao criar o novo projeto
 OK=OK
 OPEN_PROJECT=Abrir Projeto
+OPEN_PROJECT_ERROR=Erro ao carregar o projeto
 PASSWORD=Senha
 PROJECT=Projeto
 PROJECT_DETAILS=Detalhes do Projeto
