@@ -31,6 +31,7 @@
 - Added database versioning in the desktop application.
 - Created the database table structure for the desktop project.
 - Created the project registration form.
+- Created the open project form.
 
 ### Deprecated
 

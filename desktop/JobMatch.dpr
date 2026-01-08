@@ -23,7 +23,8 @@ uses
   unLogin in 'forms\unLogin.pas' {frmLogin},
   unMainDataModule in 'data_modules\unMainDataModule.pas' {dtmMainDataModule: TDataModule},
   unValidateAccount in 'forms\unValidateAccount.pas' {frmValidateAccount},
-  unProject in 'forms\unProject.pas' {frmProject};
+  unProject in 'forms\unProject.pas' {frmProject},
+  unProjectClass in 'classes\unProjectClass.pas';
 
 {$R *.RES}
 

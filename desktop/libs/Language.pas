@@ -48,6 +48,7 @@ type
     SendEmailSuccess: string;
     ProjectType: string;
     ErrorCreatingProject: string;
+    ErrorOpenProject: string;
   end;
 
   TAvailableLanguages = record
@@ -160,6 +161,7 @@ begin
     Aux.SendEmailSuccess := LoadStringLine(LanguageFile, 'SEND_EMAIL_SUCCESS');
     Aux.ProjectType := LoadStringLine(LanguageFile, 'PROJECT_TYPE');
     Aux.ErrorCreatingProject := LoadStringLine(LanguageFile, 'NEW_PROJECT_ERROR');
+    Aux.ErrorOpenProject := LoadStringLine(LanguageFile, 'OPEN_PROJECT_ERROR');
 
     BuildLanguageLabels := Aux;
   finally

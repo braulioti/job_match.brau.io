@@ -168,6 +168,7 @@
             <Form>frmProject</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="classes\unProjectClass.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

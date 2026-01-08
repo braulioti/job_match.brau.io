@@ -12,6 +12,7 @@ object frmProject: TfrmProject
   Font.Name = 'Segoe UI'
   Font.Style = []
   FormStyle = fsMDIChild
+  Position = poMainFormCenter
   Visible = True
   OnClose = FormClose
   TextHeight = 15
